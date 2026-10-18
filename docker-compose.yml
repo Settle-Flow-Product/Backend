@@ -1,0 +1,156 @@
+services:
+  # The single front door, in development as well as on the VM.
+  #
+  # It is here rather than in docker-compose.prod.yml because the routing is not what separates the
+  # two: `make dev` and `make prod` serve identical paths, and an origin that only exists in
+  # production is an origin whose links are only ever tested there. What prod adds is BIND_ADDR —
+  # every other published port moves to loopback and this becomes the only way in.
+  nginx:
+    image: nginx:1.27-alpine
+    # Deliberately not BIND_ADDR-guarded: this is the thing that is supposed to be reachable.
+    ports:
+      - "${HTTP_PORT:-80}:80"
+    volumes:
+      - ./deploy/nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      website: { condition: service_started }
+      admin:   { condition: service_started }
+      backend: { condition: service_started }
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1/healthz"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  postgres:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_USER: settle
+      POSTGRES_PASSWORD: settle
+      POSTGRES_DB: settle
+    ports:
+      # Overridable, because a machine often runs more than one of these stacks and the second one
+      # should not fail to start over a port. The default is the documented one.
+      #
+      # BIND_ADDR is what makes `make prod` safe to run on a public VM. Every service here is
+      # published for the convenience of a local run; on a server that convenience is an open port
+      # per service, each with its own idea of who may talk to it. docker-compose.prod.yml adds
+      # nginx and `make prod` sets BIND_ADDR=127.0.0.1, so these become reachable from the VM
+      # itself — where the demo and verification scripts run — and from nowhere else.
+      - "${BIND_ADDR:-0.0.0.0}:${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    command:
+      - postgres
+      - -c
+      - shared_buffers=256MB
+      - -c
+      - max_connections=200
+      # Anything slower than 100ms in a payment path is worth seeing in the log.
+      - -c
+      - log_min_duration_statement=100
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U settle -d settle"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  backend:
+    build:
+      # The repository root, not backend/, so a future differential test against the compiled
+      # contract does not require rewriting the build.
+      context: .
+      dockerfile: backend/Dockerfile
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - "${BIND_ADDR:-0.0.0.0}:${BACKEND_PORT:-8088}:8080"
+    environment:
+      DATABASE_URL: postgres://settle:settle@postgres:5432/settle
+      BIND: 0.0.0.0:8080
+      RUST_LOG: "info,sqlx=warn,tower_http=info"
+
+      NETWORK_PASSPHRASE: "Test SDF Network ; September 2015"
+      SOROBAN_RPC_URL: "https://soroban-testnet.stellar.org"
+      HORIZON_URL: "https://horizon-testnet.stellar.org"
+
+      # Filled in by `make deploy` and `make treasury`, via .env.
+      REGISTRY_CONTRACT_ID: "${REGISTRY_CONTRACT_ID:-}"
+      TREASURY_ADDRESS: "${TREASURY_ADDRESS:-}"
+      # NOT the treasury. `create_request` calls `creator.require_auth()`, and the treasury is the one
+      # account that cannot authorise anything alone — masterWeight 0 is the whole point of it.
+      BUSINESS_ADDRESS: "${BUSINESS_ADDRESS:-}"
+      BUSINESS_KEY: "${BUSINESS_KEY:-settle-business}"
+      SETTLER_KEY: "${SETTLER_KEY:-settle-settler}"
+      USDC_ISSUER: "${USDC_ISSUER:-}"
+      USDC_CONTRACT: "${USDC_CONTRACT:-}"
+
+      # Never defaulted. `make env` generates one for local development.
+      SESSION_KEY: "${SESSION_KEY:?SESSION_KEY is not set — run 'make env' first}"
+      # Both follow WEBSITE_PORT. The home domain is bound into every SEP-10 challenge and checked
+      # again on the way back, so if it were pinned to 5173 while the website was published
+      # somewhere else, wallet sign-in would refuse with a domain mismatch and nothing would say why.
+      HOME_DOMAIN: "localhost:${WEBSITE_PORT:-5173}"
+      ALLOWED_ORIGINS: "http://localhost:${WEBSITE_PORT:-5173}"
+    volumes:
+      # The Stellar CLI keystore, READ ONLY.
+      #
+      # The CLI signs contract invocations, and it resolves key NAMES (`settle-settler`) against this
+      # directory. Without it the container has the binary and no identities, so every invocation
+      # fails on an unknown key rather than a missing program — a different error, the same dead end.
+      #
+      # Read-only, and local development only. This does put signing keys inside the container, which
+      # is the trade for a service that writes to the chain at all; production replaces this with the
+      # deployment's own signer, not a bind mount from somebody's laptop.
+      - "${STELLAR_CONFIG_DIR:-${HOME}/.config/stellar}:/home/settle/.config/stellar:ro"
+    healthcheck:
+      # `CMD` with bash rather than `CMD-SHELL`: the image's /bin/sh is dash, which has no
+      # /dev/tcp, and curl is present precisely so this does not need a shell built-in.
+      test: ["CMD", "curl", "-fsS", "http://127.0.0.1:8080/ready"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 20s
+
+  website:
+    build: ./frontend/website
+    depends_on:
+      - backend
+    ports:
+      - "${BIND_ADDR:-0.0.0.0}:${WEBSITE_PORT:-5173}:5173"
+    environment:
+      # Read per request by the proxy route, never baked into the image.
+      API_TARGET: http://backend:8080
+      PORT: "5173"
+
+  admin:
+    build: ./frontend/admin
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - "${BIND_ADDR:-0.0.0.0}:${ADMIN_PORT:-5174}:5174"
+    environment:
+      # The admin console reads the database DIRECTLY — the same URL the backend is given. It is
+      # server-owned and never leaves the operator's network; the website, which is wallet-facing,
+      # has no database credential at all.
+      DATABASE_URL: postgres://settle:settle@postgres:5432/settle
+      DATABASE_POOL_MAX: "6"
+      # Never defaulted. `make env` generates one for local development; rotating it signs
+      # everybody out.
+      ADMIN_SESSION_KEY: "${ADMIN_SESSION_KEY:?ADMIN_SESSION_KEY is not set — run 'make env' first}"
+      COOKIE_SECURE: "${COOKIE_SECURE:-false}"
+      PORT: "5174"
+
+  adminer:
+    image: adminer:latest
+    ports:
+      - "${BIND_ADDR:-0.0.0.0}:${ADMINER_PORT:-8081}:8080"
+    depends_on:
+      - postgres
+    # Off by default: `docker compose --profile sql up -d adminer`.
+    profiles: ["sql"]
+
+volumes:
+  pgdata:

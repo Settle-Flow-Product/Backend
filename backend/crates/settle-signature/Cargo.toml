@@ -1,0 +1,20 @@
+[package]
+name = "settle-signature"
+version.workspace = true
+edition.workspace = true
+publish.workspace = true
+license.workspace = true
+description = "Deliverable 2 — reserve a sequence, collect signatures, submit, reconcile"
+
+[dependencies]
+settle-domain = { path = "../settle-domain" }
+settle-chain = { path = "../settle-chain" }
+serde.workspace = true
+thiserror.workspace = true
+hex.workspace = true
+
+[dev-dependencies]
+ed25519-dalek.workspace = true
+
+[lints]
+workspace = true

@@ -1,0 +1,1182 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SettleFlow · SOW 1 Delivery Deck</title>
+<style>
+:root{
+  --bg:#0A0E13; --panel:#0F1620; --line:#1E2733; --line2:#2A3A4D;
+  --tx:#F2F7FC; --tx2:#A9BACD; --tx3:#6F8296;
+  --ok:#2FBF71; --warn:#F0B429; --err:#F2555A; --info:#4C9AFF; --vio:#A78BFA; --cy:#22D3EE;
+  --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI","Inter",Roboto,"Helvetica Neue",Arial,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--tx);font-family:var(--sans);-webkit-font-smoothing:antialiased}
+body{overflow:hidden}
+#app{height:100vh;display:flex;flex-direction:column}
+#bar{height:50px;flex:none;display:flex;align-items:center;gap:14px;padding:0 20px;
+  background:#0C121A;border-bottom:1px solid var(--line);z-index:30}
+.bd{display:flex;align-items:center;gap:10px;font-weight:750;font-size:14px}
+.lg{width:26px;height:26px;border-radius:8px;background:linear-gradient(135deg,#2FBF71,#22D3EE);
+  display:grid;place-items:center;font-size:10px;font-weight:800;color:#06202B}
+.bd small{display:block;font-weight:500;color:var(--tx3);font-size:11px}
+#bar .sp{flex:1}
+.btn2{background:#182432;border:1px solid var(--line2);color:var(--tx2);border-radius:9px;
+  padding:6px 12px;font-size:12px;cursor:pointer;font-family:var(--sans)}
+.btn2:hover{background:#22303F;color:var(--tx)}
+#ct{font-family:var(--mono);font-size:12px;color:var(--tx3);min-width:56px;text-align:right}
+#pg{height:3px;background:#0C121A;flex:none}
+#pg>i{display:block;height:100%;background:linear-gradient(90deg,#2FBF71,#22D3EE);width:0;transition:width .25s}
+#main{flex:1;display:flex;min-height:0}
+#toc{width:250px;flex:none;background:#0B1219;border-right:1px solid var(--line);overflow-y:auto;padding:8px 0 40px;transition:margin-left .18s}
+#toc.hide{margin-left:-250px}
+.ts{padding:12px 15px 5px;font-size:9.5px;font-weight:750;letter-spacing:1.3px;color:var(--tx3);text-transform:uppercase}
+.ti{display:flex;gap:9px;align-items:baseline;padding:7px 15px;font-size:12.5px;color:var(--tx2);cursor:pointer;border-left:2px solid transparent;line-height:1.35}
+.ti:hover{background:#121C26;color:var(--tx)}
+.ti.on{background:#13212C;border-left-color:#2FBF71;color:#fff;font-weight:650}
+.ti b{font-family:var(--mono);font-size:10px;color:var(--tx3);font-weight:500;width:18px;flex:none}
+.ti.on b{color:#2FBF71}
+#st{flex:1;overflow-y:auto}
+.sl{display:none;max-width:1180px;margin:0 auto;padding:36px 46px 90px;animation:f .22s ease}
+.sl.on{display:block}
+@keyframes f{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}
+body.ov .sl{display:block;border-bottom:1px solid var(--line)}
+.kk{font-size:10.5px;font-weight:750;letter-spacing:1.8px;color:var(--tx3);text-transform:uppercase;margin-bottom:10px}
+h1{font-size:34px;line-height:1.14;margin:0 0 12px;letter-spacing:-.9px;font-weight:750}
+h1.sm{font-size:28px}
+h2{font-size:16px;margin:30px 0 12px;font-weight:700;padding-bottom:8px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:9px}
+h2 .n{font-family:var(--mono);font-size:10.5px;color:#2FBF71;background:#12281F;border:1px solid #1E4433;padding:2px 7px;border-radius:5px}
+h3{font-size:13.5px;margin:20px 0 8px;font-weight:700}
+p{font-size:14px;line-height:1.7;color:var(--tx2);margin:0 0 12px}
+.ld{font-size:17px;line-height:1.62;color:var(--tx2);max-width:900px;margin-bottom:20px}
+ul,ol{font-size:13.5px;line-height:1.72;color:var(--tx2);padding-left:19px;margin:0 0 12px}
+li{margin-bottom:5px} li::marker{color:var(--tx3)}
+b{color:var(--tx);font-weight:650}
+code{font-family:var(--mono);font-size:12px;background:#17222E;border:1px solid var(--line);padding:1.5px 5px;border-radius:4px;color:#9FE6C4}
+.g{display:grid;gap:12px;margin:16px 0}
+.g2{grid-template-columns:1fr 1fr}.g3{grid-template-columns:repeat(3,1fr)}.g4{grid-template-columns:repeat(4,1fr)}
+.c{background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:16px 17px}
+.c h4{margin:0 0 7px;font-size:14px;font-weight:700;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.c p{font-size:12.8px;line-height:1.62;margin:0;color:var(--tx2)}
+.c ul{font-size:12.5px;margin:8px 0 0;padding-left:16px}
+.c .n{font-family:var(--mono);font-size:10.5px;color:var(--tx3)}
+.c.ok{border-color:#1E5138;background:linear-gradient(180deg,#0F1D18,#0F1620)}
+.c.wr{border-color:#574314;background:linear-gradient(180deg,#1E1A10,#0F1620)}
+.c.dn{border-color:#5C2126;background:linear-gradient(180deg,#1E1214,#0F1620)}
+.b{display:inline-flex;align-items:center;gap:4px;font-size:9.5px;font-weight:750;letter-spacing:.5px;
+  padding:2.5px 7px;border-radius:5px;text-transform:uppercase;white-space:nowrap;vertical-align:middle}
+.b1{background:#0F2A1E;color:#5BE49B;border:1px solid #1E5138}
+.b2{background:#101E33;color:#7FB6FF;border:1px solid #1D3963}
+.b3{background:#2A2210;color:#F7CF6B;border:1px solid #574314}
+.b4{background:#301418;color:#FF9095;border:1px solid #5C2126}
+.b5{background:#231A33;color:#C8A6FF;border:1px solid #3E2E5C}
+.tw{overflow-x:auto;margin:14px 0;border:1px solid var(--line);border-radius:11px;background:var(--panel)}
+table{width:100%;border-collapse:collapse;font-size:12.8px;min-width:600px}
+th{text-align:left;padding:10px 13px;background:#17222E;color:var(--tx3);font-weight:750;font-size:10px;
+  letter-spacing:.9px;text-transform:uppercase;border-bottom:1px solid var(--line2);white-space:nowrap}
+td{padding:10px 13px;border-bottom:1px solid #17222E;color:var(--tx2);line-height:1.58;vertical-align:top}
+tr:last-child td{border-bottom:none}
+tbody tr:hover td{background:#141D28}
+td b{color:var(--tx)}
+.mono td:first-child{font-family:var(--mono);font-size:11.5px;color:#9FE6C4;white-space:nowrap}
+pre{background:#0C141C;border:1px solid var(--line);border-radius:11px;padding:13px 15px;overflow-x:auto;
+  margin:11px 0;font-family:var(--mono);font-size:11.5px;line-height:1.62;color:#C8D6E5}
+pre .c1{color:#5A7286;font-style:italic} pre .k{color:#FF8FA8} pre .s{color:#9FE6C4}
+pre .t{color:#7FB6FF} pre .f{color:#F7CF6B} pre .nu{color:#C8A6FF}
+.ph{display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:10px;color:var(--tx3);margin:14px 0 -4px}
+.ph::after{content:"";flex:1;height:1px;background:var(--line)}
+.note{border-left:4px solid var(--ok);background:#0F1A16;border-radius:0 11px 11px 0;padding:13px 16px;
+  font-size:13.5px;line-height:1.65;color:var(--tx2);margin:16px 0}
+.note.w{border-left-color:var(--warn);background:#1B1710}
+.note.d{border-left-color:var(--err);background:#1C1214}
+.note>b:first-child{display:block;margin-bottom:4px;font-size:11px;letter-spacing:.6px;text-transform:uppercase;color:#5BE49B}
+.note.w>b:first-child{color:#F7CF6B} .note.d>b:first-child{color:#FF9095}
+.viz{background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:16px;margin:14px 0;overflow-x:auto}
+.viz svg{display:block}
+.lgd{display:flex;flex-wrap:wrap;gap:7px;margin:10px 0 0}
+.lgi{display:inline-flex;align-items:center;gap:6px;font-size:11px;color:var(--tx2);background:#17222E;
+  border:1px solid var(--line);padding:4px 9px;border-radius:20px}
+.lgi i{width:9px;height:9px;border-radius:2.5px;display:block;flex:none}
+.nodes{display:grid;grid-template-columns:repeat(auto-fill,minmax(238px,1fr));gap:8px;margin:12px 0}
+.nd{background:var(--panel);border:1px solid var(--line);border-left-width:3px;border-radius:8px;padding:9px 11px}
+.nd .id{font-family:var(--mono);font-size:9.5px;color:var(--tx3)}
+.nd .ti{font-size:12px;font-weight:650;color:var(--tx);margin:2px 0 3px;line-height:1.32;padding:0;border:0;display:block;cursor:auto}
+.nd .de{font-size:10.8px;color:var(--tx3);line-height:1.5}
+.nd.user{border-left-color:var(--info)}.nd.interface{border-left-color:var(--vio)}
+.nd.system{border-left-color:#7D93AB}.nd.decision{border-left-color:var(--warn)}
+.nd.error{border-left-color:var(--err)}.nd.success{border-left-color:var(--ok)}
+.kpi{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin:16px 0}
+.kpi>div{background:var(--panel);border:1px solid var(--line);border-radius:11px;padding:13px}
+.kpi .v{font-size:24px;font-weight:750;letter-spacing:-.9px;font-family:var(--mono)}
+.kpi .l{font-size:10.5px;color:var(--tx3);margin-top:3px;line-height:1.45}
+/* browser mockup */
+.wins{display:grid;grid-template-columns:repeat(auto-fill,minmax(430px,1fr));gap:18px;margin:18px 0}
+.win{background:#0B1119;border:1px solid #26333F;border-radius:11px;overflow:hidden;box-shadow:0 12px 34px rgba(0,0,0,.5)}
+.wt{height:32px;background:#131C26;display:flex;align-items:center;gap:7px;padding:0 12px;border-bottom:1px solid #1B2732}
+.wt i{width:9px;height:9px;border-radius:50%;background:#2A3A4D;display:block}
+.wt .u{flex:1;background:#0B1119;border:1px solid #223040;border-radius:6px;font-size:9.5px;color:#6F8296;
+  padding:3px 9px;margin-left:8px;font-family:var(--mono)}
+.wb{padding:14px 16px;min-height:270px;display:flex;flex-direction:column;gap:10px}
+.fl{font-size:8.8px;color:#6F8296;font-weight:750;letter-spacing:.7px;text-transform:uppercase;margin-bottom:4px}
+.fi{background:#121B25;border:1px solid #223040;border-radius:7px;padding:8px 10px;font-size:11.5px;color:#F2F7FC;font-family:var(--mono)}
+.fi.ph2{color:#4E6072} .fi.fc{border-color:#2FBF71;box-shadow:0 0 0 2px rgba(47,191,113,.13)}
+.btn{background:#2FBF71;color:#052616;text-align:center;padding:9px;border-radius:8px;font-size:12px;font-weight:750}
+.btn.g{background:#182432;color:#A9BACD;border:1px solid #26364A}
+.btn.d{background:#2A1418;color:#FF9095;border:1px solid #5C2126}
+.row{display:flex;justify-content:space-between;align-items:center;font-size:11.5px;color:#A9BACD;padding:5px 0}
+.row b{color:#F2F7FC}
+.hr{height:1px;background:#1B2732}
+.pill{font-size:8.5px;font-weight:800;padding:2.5px 7px;border-radius:20px;letter-spacing:.4px;text-transform:uppercase}
+.pill.ok{background:#0F2A1E;color:#5BE49B}.pill.w{background:#2A2210;color:#F7CF6B}
+.pill.e{background:#2A1418;color:#FF9095}.pill.n{background:#182432;color:#8FA3B8}.pill.b{background:#101E33;color:#7FB6FF}
+.spec{background:var(--panel);border:1px solid var(--line);border-radius:11px;padding:13px 15px;margin-top:9px}
+.spec h5{margin:0 0 7px;font-size:10.5px;letter-spacing:.8px;text-transform:uppercase;color:#2FBF71;font-weight:750}
+.spec dl{margin:0;font-size:12px;line-height:1.6}
+.spec dt{color:var(--tx);font-weight:650;margin-top:7px} .spec dt:first-child{margin-top:0}
+.spec dd{margin:1px 0 0;color:var(--tx3)}
+.ck{display:flex;gap:9px;align-items:flex-start;padding:8px 0;border-bottom:1px solid #17222E;font-size:12.8px}
+.ck:last-child{border-bottom:none}
+.ck .bx{width:14px;height:14px;border:1.5px solid #2A3A4D;border-radius:4px;flex:none;margin-top:2px}
+.ck .tx{color:var(--tx2);line-height:1.55}
+.ck .tx b{display:block;color:var(--tx);margin-bottom:1px}
+.ow{font-family:var(--mono);font-size:9.5px;padding:1.5px 6px;border-radius:4px;background:#182432;color:#8FA3B8;margin-left:6px}
+@media print{body{overflow:visible}#bar,#toc,#pg{display:none}.sl{display:block!important;page-break-after:always}}
+@media (max-width:940px){#toc{position:absolute;z-index:20;height:100%}.sl{padding:24px 18px 70px}
+  h1{font-size:25px}.g2,.g3,.g4{grid-template-columns:1fr}.wins{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div id="app">
+<div id="bar">
+  <button class="btn2" id="tb">☰</button>
+  <div class="bd"><span class="lg">SF</span><span>SettleFlow · SOW 1<small>Delivery Deck · 20 ngày · $5.000</small></span></div>
+  <span class="sp"></span>
+  <button class="btn2" id="ovb">Xem toàn bộ</button>
+  <button class="btn2" id="prb">In / PDF</button>
+  <button class="btn2" id="pv">‹</button><button class="btn2" id="nx">›</button>
+  <span id="ct">1 / 14</span>
+</div>
+<div id="pg"><i></i></div>
+<div id="main"><nav id="toc"></nav><div id="st">
+
+<!-- 01 -->
+<section class="sl" data-sec="Mở đầu" data-t="Trang bìa">
+  <div class="kk">Instaward · Statement of Work 1</div>
+  <h1>SOW 1 — Payment Request Registry<br>&amp; Multisig Approval</h1>
+  <p class="ld">Bản đặc tả giao hàng cho 20 ngày làm việc: <b>feature</b>, <b>luồng nghiệp vụ</b>, <b>giao diện tối thiểu</b> và <b>danh sách module phải release</b>. Viết lại từ văn bản SOW, bám kiến trúc đã chốt trong SettleFlow Technical Design Deck v1.1.</p>
+
+  <div class="kpi">
+    <div><div class="v" style="color:#5BE49B">3</div><div class="l">deliverable cam kết</div></div>
+    <div><div class="v" style="color:#7FB6FF">20</div><div class="l">ngày làm việc</div></div>
+    <div><div class="v" style="color:#C8A6FF">$5.000</div><div class="l">ngân sách · 35/35/30%</div></div>
+    <div><div class="v" style="color:#F7CF6B">7</div><div class="l">nhóm module phải release</div></div>
+    <div><div class="v" style="color:#22D3EE">4</div><div class="l">màn hình giao diện tối thiểu</div></div>
+    <div><div class="v" style="color:#FF9095">0</div><div class="l">đồng nào do contract giữ</div></div>
+  </div>
+
+  <div class="g g3">
+    <div class="c ok"><h4><span class="b b1">Deliverable 1</span>35% · $1.750</h4>
+      <p>Soroban contract tạo payment request gồm <b>vendor address, amount, asset, reference</b> và theo dõi trạng thái qua <b>pending → approved → paid</b>. Contract <b>không bao giờ giữ tiền</b> — chỉ ghi nhận và xác minh trạng thái.</p></div>
+    <div class="c ok"><h4><span class="b b1">Deliverable 2</span>35% · $1.750</h4>
+      <p>Dịch vụ backend dựng transaction Stellar chưa ký <b>từ một request đã approved</b>, nhận chữ ký của từng approver, và submit khi tổng weight đạt ngưỡng của tài khoản treasury.</p></div>
+    <div class="c ok"><h4><span class="b b1">Deliverable 3</span>30% · $1.500</h4>
+      <p>Deploy registry + treasury 3 signer trên testnet. Demo một request thu đủ <b>2 trong 3 chữ ký</b>, chi tới địa chỉ vendor, registry đánh dấu paid — kèm transaction hash tra cứu được.</p></div>
+  </div>
+
+  <div class="note"><b>Vì sao chọn đúng phạm vi này</b>
+    Stellar đã có sẵn <b>multisig gốc</b> với weighted signers và thresholds — nguyên thủy đã chạy production nhiều năm. Chưa ai nối nó vào một quy trình duyệt chi thực tế. SOW 1 xây đúng lớp còn thiếu đó, và cố tình <b>không chạm vào custody</b> để có thể lên testnet trong 20 ngày mà không cần security audit.</div>
+</section>
+
+<!-- 02 -->
+<section class="sl" data-sec="Mở đầu" data-t="Ranh giới phạm vi">
+  <div class="kk">Phạm vi</div>
+  <h1 class="sm">Cái gì làm, cái gì dứt khoát không</h1>
+  <p class="ld">Rủi ro lớn nhất của một Instaward 20 ngày là mở rộng phạm vi. Danh sách bên phải là ranh giới cứng — bất kỳ pull request nào chạm vào đó đều bị đóng, kể cả khi nó "chỉ mất một buổi".</p>
+
+  <div class="g g2">
+    <div class="c ok"><h4>✓ Trong phạm vi</h4>
+      <ul>
+        <li>Contract sổ đăng ký lệnh chi, <b>không custody</b></li>
+        <li>Vòng đời <code>pending → approved → paid</code> + nhánh <code>cancelled</code></li>
+        <li>Treasury G-account: 3 signer weight 1, threshold 2</li>
+        <li>Dựng unsigned transaction từ request đã approved</li>
+        <li>Thu chữ ký từng approver, kiểm ngưỡng, submit</li>
+        <li>Đọc lại chain để xác nhận trước khi ghi Paid</li>
+        <li>Giao diện tối thiểu đủ chứng minh deliverable</li>
+        <li>Deploy testnet + demo round trip + evidence</li>
+      </ul></div>
+    <div class="c dn"><h4>✗ Ngoài phạm vi — trích nguyên văn SOW</h4>
+      <ul>
+        <li><b>Dashboard</b> đầy đủ</li>
+        <li><b>Vendor facing views</b> — không có cổng cho nhà cung cấp</li>
+        <li><b>Reconciliation indexer</b> — không xây indexer đối soát riêng</li>
+        <li><b>Accounting export</b> — không xuất dữ liệu kế toán</li>
+        <li><b>Security audit</b> — không thuê kiểm định trong 30 ngày này</li>
+        <li><b>Mainnet deployment</b> — testnet only</li>
+      </ul>
+      <p style="margin-top:9px">Thêm bốn thứ tự đặt ra để bảo vệ lịch: không escrow giữ tiền, không off-ramp fiat, không đa ngôn ngữ, không ứng dụng di động.</p></div>
+  </div>
+
+  <h2><span class="n">2.1</span> Ràng buộc Instawards đã ký</h2>
+  <div class="g g4">
+    <div class="c"><div class="n">01</div><h4>≤ 30 ngày</h4><p>Toàn bộ phạm vi hoàn thành trong 30 ngày lịch, tương đương 20 ngày làm việc.</p></div>
+    <div class="c"><div class="n">02</div><h4>Thực thi, không thăm dò</h4><p>Instawards tài trợ việc làm ra thứ chạy được, không tài trợ nghiên cứu mở.</p></div>
+    <div class="c"><div class="n">03</div><h4>Tối đa 2 lần tiếp nối</h4><p>Mỗi dự án nhận không quá hai Instaward tiếp theo.</p></div>
+    <div class="c"><div class="n">04</div><h4>Trần $5.000 / $15.000</h4><p>Mỗi Instaward tối đa $5.000; tổng cộng dồn không vượt $15.000.</p></div>
+  </div>
+
+  <div class="note w"><b>Một điều cần thống nhất trước Ngày 1</b>
+    Văn bản SOW mô tả luồng <b>chi tiền cho nhà cung cấp</b> (accounts payable). Sản phẩm thương mại SettleFlow phát triển tiếp theo hướng <b>thu tiền từ khách hàng</b>. Về kỹ thuật, sổ đăng ký và cơ chế phê duyệt là <b>cùng một thứ</b> cho cả hai chiều — nên code giao cho Instaward vẫn đúng nguyên vẹn. Deck này bám đúng văn bản SOW: mọi thứ trình bày dưới đây là luồng chi tiền cho vendor.</div>
+</section>
+
+<!-- 03 FEATURE -->
+<section class="sl" data-sec="Feature" data-t="Danh sách feature">
+  <div class="kk">Feature</div>
+  <h1 class="sm">Mười ba feature phải chạy được</h1>
+  <p class="ld">Mỗi feature có mã, có bên chịu trách nhiệm và có cách nghiệm thu quan sát được. Không có feature nào nghiệm thu bằng "đã code xong".</p>
+
+  <div class="tw"><table>
+    <thead><tr><th style="width:64px">Mã</th><th style="width:230px">Feature</th><th>Mô tả</th><th style="width:210px">Nghiệm thu bằng</th></tr></thead>
+    <tbody>
+      <tr><td><b>F-01</b></td><td>Kết nối &amp; xác thực ví</td><td>Người dùng nội bộ kết nối ví Stellar và ký một nonce challenge để chứng minh quyền kiểm soát địa chỉ. Không chuyển tài sản.</td><td>Đăng nhập được bằng ví, sai chữ ký thì bị từ chối</td></tr>
+      <tr><td><b>F-02</b></td><td>Tạo payment request</td><td>Nhập vendor address, amount, asset, reference. Ghi lên registry contract.</td><td>Tx hash của <code>create_request</code> trên Stellar Expert</td></tr>
+      <tr><td><b>F-03</b></td><td>Validate dữ liệu lệnh chi</td><td>Amount &gt; 0 và ≤ 7 thập phân, asset được hỗ trợ, vendor là địa chỉ Stellar hợp lệ, reference 1–64 ký tự.</td><td>Mỗi ràng buộc có một unit test âm tính</td></tr>
+      <tr><td><b>F-04</b></td><td>Chống tạo trùng</td><td>Request id sinh deterministic từ idempotency key. Bấm hai lần hoặc retry sau timeout không tạo lệnh thứ hai.</td><td>Gọi API hai lần cùng key → cùng một request id</td></tr>
+      <tr><td><b>F-05</b></td><td>Theo dõi vòng đời trạng thái</td><td>Pending → Approved → Paid, cùng nhánh Cancelled. Trạng thái là nguồn sự thật trên chain.</td><td>Đọc <code>get_request</code> ở từng mốc thấy đúng trạng thái</td></tr>
+      <tr><td><b>F-06</b></td><td>Cấu hình treasury multisig</td><td>3 signer weight 1, thresholds low/med/high = 2, và masterWeight = 0.</td><td>Đọc account từ Horizon, khẳng định đúng cấu hình</td></tr>
+      <tr><td><b>F-07</b></td><td>Guard chống khoá tài khoản</td><td>Chặn mọi <code>setOptions</code> khiến tổng weight của signer nhỏ hơn threshold — tình huống không phục hồi được.</td><td>Test khẳng định cấu hình gây khoá bị từ chối</td></tr>
+      <tr><td><b>F-08</b></td><td>Dựng transaction chưa ký</td><td>Từ một request <b>đã approved</b>, dựng payment tx treasury → vendor, memo gắn request id, có timebounds.</td><td>XDR trả về decode được, memo khớp request id</td></tr>
+      <tr><td><b>F-09</b></td><td>Khoá sequence number</td><td>Một lệnh chi đang bay mỗi treasury. Hai lệnh song song thì lệnh thứ hai bị chặn sạch, không phải fail sau khi đã thu chữ ký.</td><td>Test đồng thời hai lệnh → lệnh thứ hai nhận 409</td></tr>
+      <tr><td><b>F-10</b></td><td>Thu chữ ký approver</td><td>Verify ed25519 trên đúng tx hash, signer phải thuộc policy đã ghim, một signer chỉ ký một lần.</td><td>Chữ ký sai hoặc signer lạ đều bị từ chối</td></tr>
+      <tr><td><b>F-11</b></td><td>Phát hiện đủ ngưỡng &amp; submit</td><td>Cộng dồn weight, khi đạt 2 thì ghép DecoratedSignature và gửi lên Horizon.</td><td>Tx hash của lệnh chi, xem được trên Stellar Expert</td></tr>
+      <tr><td><b>F-12</b></td><td>Nhánh từ chối</td><td>Approver từ chối thì request chuyển Cancelled và <b>dừng hẳn</b> việc submit.</td><td>Test khẳng định không có tx nào rời treasury</td></tr>
+      <tr><td><b>F-13</b></td><td>Đánh dấu Paid sau readback</td><td>Chỉ gọi <code>mark_paid</code> sau khi đọc lại ledger xác nhận. Timeout và <code>tx_bad_seq</code> đều đi qua reconcile.</td><td>Tx hash của <code>mark_paid</code>, và trạng thái đọc lại là Paid</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="note d"><b>Ba feature là chỗ dễ mất tiền nhất — code review kỹ nhất ở đây</b>
+    <b>F-09</b> nếu sai thì hai người duyệt bị làm phiền vô ích và lệnh chi chết vì <code>tx_bad_seq</code>. <b>F-12</b> nếu sai thì một lệnh đã bị từ chối vẫn chi tiền. <b>F-13</b> nếu xử lý <code>tx_bad_seq</code> bằng cách dựng lại transaction thay vì đọc chain trước, hệ thống sẽ <b>chi tiền hai lần</b> cho cùng một lệnh.</div>
+</section>
+
+<!-- 04 MODULE -->
+<section class="sl" data-sec="Module" data-t="★ Module cần release">
+  <div class="kk">Danh sách bàn giao</div>
+  <h1 class="sm">Bảy nhóm module phải release trong SOW 1</h1>
+  <p class="ld">Đây là danh sách công việc chính thức. Mỗi module có mã, thuộc deliverable nào, ai làm, và điều kiện coi như xong. Dev có thể copy thẳng bảng này thành issue tracker.</p>
+
+  <h2><span class="n">A</span> Smart Contract — Registry <span class="b b1">Deliverable 1 · 35% · $1.750</span></h2>
+  <div class="tw"><table class="mono">
+    <thead><tr><th style="width:62px">Mã</th><th style="width:250px">Module</th><th>Nội dung</th><th style="width:120px">Owner</th></tr></thead>
+    <tbody>
+      <tr><td>A1</td><td><b>Storage layout &amp; types</b></td><td><code>DataKey</code> (Admin, Settler, Req), struct <code>PaymentRequest</code> gồm creator, payee, asset, amount, reference, expiry, status, paid_tx. Enum <code>ReqStatus</code> 4 giá trị và 12 mã lỗi.</td><td>Contract dev</td></tr>
+      <tr><td>A2</td><td><b>create_request()</b></td><td>Ghi lệnh chi mới. <code>require_auth</code> theo creator, kiểm amount &gt; 0 và expiry ở tương lai, chặn trùng id.</td><td>Contract dev</td></tr>
+      <tr><td>A3</td><td><b>approve()</b></td><td>Chuyển Pending → Approved. Chỉ settler gọi được, sau khi backend đã thu đủ weight ≥ threshold.</td><td>Contract dev</td></tr>
+      <tr><td>A4</td><td><b>mark_paid()</b></td><td>Chuyển Approved → Paid kèm tx hash và payer. Chặn gọi hai lần, chặn khi đã quá hạn, kiểm amount khớp.</td><td>Contract dev</td></tr>
+      <tr><td>A5</td><td><b>cancel_request()</b></td><td>Nhánh từ chối. <code>require_auth</code> theo creator, chỉ hủy được khi chưa Paid.</td><td>Contract dev</td></tr>
+      <tr><td>A6</td><td><b>get_request() · is_payable()</b></td><td>Hàm đọc, gọi qua RPC simulation. Không bao giờ submit như một transaction.</td><td>Contract dev</td></tr>
+      <tr><td>A7</td><td><b>Events</b></td><td><code>req_new</code>, <code>req_appr</code>, <code>req_paid</code>, <code>req_canc</code> — là nguồn cho bộ đồng bộ chain.</td><td>Contract dev</td></tr>
+      <tr><td>A8</td><td><b>Quản lý TTL</b></td><td>Bump TTL cả persistent lẫn <b>instance storage</b> ở mọi entry point. Quên instance là toàn bộ contract chết khi hết hạn.</td><td>Contract dev</td></tr>
+      <tr><td>A9</td><td><b>Bộ test đơn vị</b></td><td>16 ca: vòng đời đầy đủ, chống lạm dụng, biên. Coverage dòng ≥ 90% cho crate registry.</td><td>Contract dev + Tester</td></tr>
+    </tbody>
+  </table></div>
+
+  <h2><span class="n">B</span> Treasury &amp; Multisig <span class="b b2">Deliverable 2 · phần 1</span></h2>
+  <div class="tw"><table class="mono">
+    <thead><tr><th style="width:62px">Mã</th><th style="width:250px">Module</th><th>Nội dung</th><th style="width:120px">Owner</th></tr></thead>
+    <tbody>
+      <tr><td>B1</td><td><b>Script tạo treasury</b></td><td>Fund bằng friendbot, thiết lập trustline USDC testnet, chạy lại được từ đầu trong dưới 10 phút.</td><td>Backend</td></tr>
+      <tr><td>B2</td><td><b>Cấu hình 3 signer</b></td><td>Ba signer weight 1, thresholds low/med/high = 2, và <b>masterWeight = 0</b>. Thiếu bước cuối thì multisig chỉ là trang trí.</td><td>Backend</td></tr>
+      <tr><td>B3</td><td><b>Guard chống khoá</b></td><td>Trước mọi <code>setOptions</code>: kiểm <code>Σ weight signer còn hiệu lực + masterWeight ≥ max(low, med, high)</code> trên bộ giá trị mới.</td><td>Backend</td></tr>
+      <tr><td>B4</td><td><b>Policy &amp; signer enrollment</b></td><td>Tạo policy version mới thay vì sửa tại chỗ. Settlement ghim <code>policy_version</code> lúc authorize.</td><td>Backend</td></tr>
+      <tr><td>B5</td><td><b>Script xác minh cấu hình</b></td><td>Đọc lại account từ Horizon và assert đúng 3 signer, đúng threshold, master = 0. Output là evidence nộp kèm.</td><td>Tester</td></tr>
+    </tbody>
+  </table></div>
+
+  <h2><span class="n">C</span> Dịch vụ thu chữ ký <span class="b b2">Deliverable 2 · phần 2</span></h2>
+  <div class="tw"><table class="mono">
+    <thead><tr><th style="width:62px">Mã</th><th style="width:250px">Module</th><th>Nội dung</th><th style="width:120px">Owner</th></tr></thead>
+    <tbody>
+      <tr><td>C1</td><td><b>build_unsigned()</b></td><td>Dựng payment tx treasury → vendor từ request <b>đã approved</b>. Memo = request id để đối soát ngược. <b>Bắt buộc</b> có timebounds 1 giờ.</td><td>Backend</td></tr>
+      <tr><td>C2</td><td><b>Khoá sequence number</b></td><td>Giữ seq ở tầng DB, unique index theo <code>(treasury_address, reserved_seq)</code>. Một lệnh đang bay mỗi treasury.</td><td>Backend + Tech lead</td></tr>
+      <tr><td>C3</td><td><b>submit_signature()</b></td><td>Verify ed25519 trên đúng tx hash, signer phải thuộc policy đã ghim, primary key chặn ký trùng.</td><td>Backend</td></tr>
+      <tr><td>C4</td><td><b>Cộng weight &amp; phát hiện ngưỡng</b></td><td>Trả về tiến độ <code>collected / required</code> cho giao diện; phát sự kiện khi đủ.</td><td>Backend</td></tr>
+      <tr><td>C5</td><td><b>Ghép chữ ký &amp; submit</b></td><td><code>DecoratedSignature</code> đúng hint, gửi Horizon, ghi tx hash.</td><td>Backend</td></tr>
+      <tr><td>C6</td><td><b>Xử lý outcome chưa rõ</b></td><td><code>tx_bad_seq</code> và timeout xử lý <b>như nhau</b>: đọc chain theo memo trước, submit lại đúng envelope cũ, chỉ rebuild khi chắc chắn chưa có gì lên chain.</td><td>Tech lead</td></tr>
+      <tr><td>C7</td><td><b>Fee-bump</b></td><td>Phí thấp thì bọc envelope đã ký bằng fee-bump — chữ ký approver giữ nguyên hiệu lực, không làm phiền lại.</td><td>Backend</td></tr>
+      <tr><td>C8</td><td><b>Nhánh từ chối</b></td><td>Request bị reject thì dừng hẳn submit, giải phóng seq đã giữ, ghi audit.</td><td>Backend</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<!-- 05 MODULE 2 -->
+<section class="sl" data-sec="Module" data-t="Module D–G">
+  <div class="kk">Danh sách bàn giao · tiếp</div>
+  <h1 class="sm">Đồng bộ chain, giao diện, dữ liệu và demo</h1>
+
+  <h2><span class="n">D</span> Đồng bộ chain — bản tối giản <span class="b b2">Hỗ trợ Deliverable 2 + 3</span></h2>
+  <div class="tw"><table class="mono">
+    <thead><tr><th style="width:62px">Mã</th><th style="width:250px">Module</th><th>Nội dung</th><th style="width:120px">Owner</th></tr></thead>
+    <tbody>
+      <tr><td>D1</td><td><b>Ingest theo cursor</b></td><td>Đọc event từ Horizon/RPC theo cursor. Cursor chỉ tiến <b>sau khi</b> commit thành công.</td><td>Tech lead</td></tr>
+      <tr><td>D2</td><td><b>Khử trùng tuyệt đối</b></td><td><code>UNIQUE(tx_hash, op_index)</code> ở tầng DB. Hai bản daemon chạy song song vẫn an toàn.</td><td>Tech lead</td></tr>
+      <tr><td>D3</td><td><b>Readback trước khi ghi Paid</b></td><td>Không bao giờ suy ra Paid từ kết quả submit. Chỉ ghi sau khi đọc lại ledger.</td><td>Tech lead</td></tr>
+      <tr><td>D4</td><td><b>Cập nhật read-model</b></td><td>Giao diện đọc từ read-model, không gọi Horizon đồng bộ trong đường request.</td><td>Backend</td></tr>
+    </tbody>
+  </table></div>
+
+  <h2><span class="n">E</span> Giao diện tối thiểu <span class="b b5">Đủ để demo — không phải dashboard</span></h2>
+  <div class="tw"><table class="mono">
+    <thead><tr><th style="width:62px">Mã</th><th style="width:250px">Module</th><th>Nội dung</th><th style="width:120px">Owner</th></tr></thead>
+    <tbody>
+      <tr><td>E1</td><td><b>Đăng nhập bằng ví</b></td><td>Kết nối ví, ký nonce challenge, mở phiên làm việc nội bộ.</td><td>Frontend</td></tr>
+      <tr><td>E2</td><td><b>Màn hình tạo lệnh chi</b></td><td>Bốn trường theo SOW, validate ngay tại field, xác nhận trước khi ghi lên chain.</td><td>Frontend</td></tr>
+      <tr><td>E3</td><td><b>Danh sách lệnh chi</b></td><td>Trạng thái Pending / Approved / Paid / Cancelled, tiến độ chữ ký, lọc cơ bản.</td><td>Frontend</td></tr>
+      <tr><td>E4</td><td><b>Màn hình approver ký</b></td><td>Hiện vendor, số tiền, tham chiếu, ai đã ký, hạn của transaction. Kết nối ví và ký.</td><td>Frontend</td></tr>
+      <tr><td>E5</td><td><b>Trang evidence</b></td><td>Bảng tx hash từng mốc kèm link Stellar Expert — chính là bằng chứng nộp cho Chapter Lead.</td><td>Frontend</td></tr>
+    </tbody>
+  </table></div>
+
+  <h2><span class="n">F</span> Dữ liệu — chỉ những bảng thật sự cần</h2>
+  <div class="tw"><table class="mono">
+    <thead><tr><th style="width:62px">Mã</th><th style="width:250px">Bảng</th><th>Vì sao cần trong SOW 1</th><th style="width:120px">Owner</th></tr></thead>
+    <tbody>
+      <tr><td>F1</td><td><b>payment_requests</b></td><td>Bản sao off-chain của lệnh chi để lọc và hiển thị nhanh. Chain vẫn là nguồn sự thật.</td><td>Backend</td></tr>
+      <tr><td>F2</td><td><b>settlements</b></td><td>Có <code>request_id</code>, <code>treasury_address</code>, <code>reserved_seq</code>, <code>submit_attempted_at</code>. Thiếu bốn cột này là không nối được lệnh chi với transaction.</td><td>Backend</td></tr>
+      <tr><td>F3</td><td><b>settlement_approvals</b></td><td>Lưu chữ ký từng approver kèm weight. Khoá chính chặn ký trùng.</td><td>Backend</td></tr>
+      <tr><td>F4</td><td><b>chain_events + ingest_cursor</b></td><td>Nhật ký ingest append-only và vị trí đọc. Là xương sống của tính đúng đắn.</td><td>Tech lead</td></tr>
+      <tr><td>F5</td><td><b>idempotency_keys</b></td><td>Chống tạo lệnh chi trùng khi mạng chập chờn.</td><td>Backend</td></tr>
+      <tr><td>F6</td><td><b>audit_events</b></td><td>Ai làm gì, khi nào, từ trạng thái nào. Append-only, thu hồi quyền UPDATE/DELETE.</td><td>Backend</td></tr>
+    </tbody>
+  </table></div>
+
+  <h2><span class="n">G</span> Deploy &amp; Demo <span class="b b1">Deliverable 3 · 30% · $1.500</span></h2>
+  <div class="tw"><table class="mono">
+    <thead><tr><th style="width:62px">Mã</th><th style="width:250px">Module</th><th>Nội dung</th><th style="width:120px">Owner</th></tr></thead>
+    <tbody>
+      <tr><td>G1</td><td><b>Script deploy testnet</b></td><td>Deploy contract và treasury từ đầu, không thao tác tay bước nào. Chạy lại được nếu testnet reset.</td><td>Contract dev</td></tr>
+      <tr><td>G2</td><td><b>Kịch bản demo round trip</b></td><td>Tạo lệnh chi → thu 2/3 chữ ký → chi tới vendor → registry đánh dấu Paid.</td><td>Tech lead</td></tr>
+      <tr><td>G3</td><td><b>Thu thập tx hash</b></td><td>Ghi lại hash ở từng mốc vào bảng evidence, kèm link Stellar Expert.</td><td>Tester</td></tr>
+      <tr><td>G4</td><td><b>README + hướng dẫn deploy</b></td><td>Người ngoài đọc và tự deploy lại được từ đầu.</td><td>Tech lead</td></tr>
+      <tr><td>G5</td><td><b>Video demo 3–5 phút</b></td><td>Để Chapter Lead review được mà không cần kiến thức kỹ thuật sâu.</td><td>Tech lead</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="note"><b>Tổng cộng 37 module trong 7 nhóm</b>
+    A (9) · B (5) · C (8) · D (4) · E (5) · F (6) · G (5). Nhóm <b>C</b> và <b>D</b> là nơi tập trung rủi ro kỹ thuật; nhóm <b>G</b> là nơi tập trung rủi ro nghiệm thu — làm xong hết mà không có tx hash thì vẫn bị đánh giá là thiếu bằng chứng.</div>
+</section>
+
+<!-- 06 FLOW A -->
+<section class="sl" data-sec="Flow" data-t="Flow · Tạo lệnh chi">
+  <div class="kk">Luồng nghiệp vụ · phần 1/2</div>
+  <h1 class="sm">Từ đăng nhập đến lệnh chi ở trạng thái Pending</h1>
+  <p class="ld">Mười ba bước, sáu lane. Điểm khó duy nhất ở phần này là <code>S-10</code>: không bao giờ tin kết quả submit, chỉ tin trạng thái đọc lại từ contract.</p>
+<div class="viz"><svg viewBox="0 0 1918 356" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Luồng nghiệp vụ SOW 1 phần A" style="min-width:1500px">
+<defs>
+<marker id="fflow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5.5" markerHeight="5.5" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#4A5F75"/></marker>
+<marker id="fsuccess" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5.5" markerHeight="5.5" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#2FBF71"/></marker>
+<marker id="ferror" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5.5" markerHeight="5.5" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#F2555A"/></marker>
+<marker id="fopen" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5.5" markerHeight="5.5" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#22D3EE"/></marker>
+</defs><style>svg .nt{font-size:9.6px;fill:#F2F7FC;font-weight:650}svg .ni{font-size:7.8px;font-family:ui-monospace,Menlo,monospace}svg .ll{font-size:9.4px;fill:#6F8296;font-weight:700}svg .el{font-size:7.6px;fill:#7D93AB}</style>
+<rect x="0" y="36" width="1918" height="76" fill="#0D141B"/>
+<line x1="0" y1="36" x2="1918" y2="36" stroke="#18222E"/>
+<text class="ll" x="6" y="52">Doanh nghiệp</text>
+<rect x="0" y="112" width="1918" height="76" fill="#0A1017"/>
+<line x1="0" y1="112" x2="1918" y2="112" stroke="#18222E"/>
+<text class="ll" x="6" y="128">App tối thiểu</text>
+<rect x="0" y="188" width="1918" height="76" fill="#0D141B"/>
+<line x1="0" y1="188" x2="1918" y2="188" stroke="#18222E"/>
+<text class="ll" x="6" y="204">Backend</text>
+<rect x="0" y="264" width="1918" height="76" fill="#0A1017"/>
+<line x1="0" y1="264" x2="1918" y2="264" stroke="#18222E"/>
+<text class="ll" x="6" y="280">Registry contract</text>
+<line x1="152" y1="36" x2="152" y2="340" stroke="#22303F"/>
+<path d="M304 150.0 C311.0 150.0,311.0 74.0,318 74.0" stroke="#4A5F75" stroke-width="1.2" fill="none" marker-end="url(#fflow)" opacity=".9"/>
+<text class="el" x="311.0" y="109.0" text-anchor="middle">bắt đầu</text>
+<path d="M460 74.0 C467.0 74.0,467.0 226.0,474 226.0" stroke="#4A5F75" stroke-width="1.2" fill="none" marker-end="url(#fflow)" opacity=".9"/>
+<text class="el" x="467.0" y="147.0" text-anchor="middle">signed challenge</text>
+<path d="M616 226.0 C623.0 226.0,623.0 150.0,630 150.0" stroke="#2FBF71" stroke-width="1.2" fill="none" marker-end="url(#fsuccess)" opacity=".9"/>
+<text class="el" x="623.0" y="185.0" text-anchor="middle">session hợp lệ</text>
+<path d="M772 150.0 C779.0 150.0,779.0 74.0,786 74.0" stroke="#4A5F75" stroke-width="1.2" fill="none" marker-end="url(#fflow)" opacity=".9"/>
+<text class="el" x="779.0" y="109.0" text-anchor="middle">nhập</text>
+<path d="M928 74.0 C935.0 74.0,935.0 226.0,942 226.0" stroke="#4A5F75" stroke-width="1.2" fill="none" marker-end="url(#fflow)" opacity=".9"/>
+<text class="el" x="935.0" y="147.0" text-anchor="middle">validate</text>
+<path d="M1084 226.0 C1091.0 226.0,1091.0 226.0,1098 226.0" stroke="#4A5F75" stroke-width="1.2" fill="none" marker-end="url(#fflow)" opacity=".9"/>
+<path d="M1240 226.0 C1247.0 226.0,1247.0 150.0,1254 150.0" stroke="#F2555A" stroke-width="1.2" fill="none" marker-end="url(#ferror)" opacity=".9"/>
+<text class="el" x="1247.0" y="185.0" text-anchor="middle">không</text>
+<path d="M1325.0 175.0 C1325.0 180.0,857.0 180.0,857.0 99.0" stroke="#F2555A" stroke-width="1.1" fill="none" stroke-dasharray="3 3" marker-end="url(#ferror)" opacity=".85"/>
+<path d="M1240 226.0 C1247.0 226.0,1247.0 302.0,1254 302.0" stroke="#2FBF71" stroke-width="1.2" fill="none" marker-end="url(#fsuccess)" opacity=".9"/>
+<text class="el" x="1247.0" y="261.0" text-anchor="middle">có</text>
+<path d="M1396 302.0 C1403.0 302.0,1403.0 226.0,1410 226.0" stroke="#4A5F75" stroke-width="1.2" fill="none" marker-end="url(#fflow)" opacity=".9"/>
+<text class="el" x="1403.0" y="261.0" text-anchor="middle">readback</text>
+<path d="M1552 226.0 C1559.0 226.0,1559.0 226.0,1566 226.0" stroke="#F2555A" stroke-width="1.2" fill="none" marker-end="url(#ferror)" opacity=".9"/>
+<path d="M1637.0 251.0 C1637.0 332.0,1325.0 332.0,1325.0 327.0" stroke="#F2555A" stroke-width="1.1" fill="none" stroke-dasharray="3 3" marker-end="url(#ferror)" opacity=".85"/>
+<path d="M1552 226.0 C1559.0 226.0,1559.0 302.0,1566 302.0" stroke="#2FBF71" stroke-width="1.2" fill="none" marker-end="url(#fsuccess)" opacity=".9"/>
+<text class="el" x="1559.0" y="261.0" text-anchor="middle">Pending</text>
+<path d="M1708 302.0 C1715.0 302.0,1715.0 226.0,1722 226.0" stroke="#4A5F75" stroke-width="1.2" fill="none" marker-end="url(#fflow)" opacity=".9"/>
+<text class="el" x="1715.0" y="261.0" text-anchor="middle">notify</text>
+<g><title>S-01 — Công cụ nội bộ, chỉ người trong doanh nghiệp truy cập.</title>
+<rect x="162" y="125.0" width="142" height="50" rx="7" fill="#1A1630" stroke="#A78BFA" stroke-width="1.1"/>
+<rect x="162" y="125.0" width="3" height="50" rx="1.5" fill="#A78BFA"/>
+<text class="ni" x="170" y="137.0" fill="#A78BFA">S-01</text>
+<text class="nt" x="170" y="150.0">Mở app SOW 1</text>
+</g>
+<g><title>S-02 — Chứng minh quyền kiểm soát địa chỉ; không chuyển tài sản.</title>
+<rect x="318" y="49.0" width="142" height="50" rx="7" fill="#101C29" stroke="#4C9AFF" stroke-width="1.1"/>
+<rect x="318" y="49.0" width="3" height="50" rx="1.5" fill="#4C9AFF"/>
+<text class="ni" x="326" y="61.0" fill="#4C9AFF">S-02</text>
+<text class="nt" x="326" y="74.0">Kết nối ví &amp; ký</text>
+<text class="nt" x="326" y="85.0">challenge</text>
+</g>
+<g><title>S-03 — Nonce một lần, gắn domain và network, chống replay.</title>
+<rect x="474" y="201.0" width="142" height="50" rx="7" fill="#141C24" stroke="#7D93AB" stroke-width="1.1"/>
+<rect x="474" y="201.0" width="3" height="50" rx="1.5" fill="#7D93AB"/>
+<text class="ni" x="482" y="213.0" fill="#7D93AB">S-03</text>
+<text class="nt" x="482" y="226.0">Xác minh chữ ký</text>
+</g>
+<g><title>S-04 — Bốn trường theo đúng SOW: vendor, amount, asset, reference.</title>
+<rect x="630" y="125.0" width="142" height="50" rx="7" fill="#1A1630" stroke="#A78BFA" stroke-width="1.1"/>
+<rect x="630" y="125.0" width="3" height="50" rx="1.5" fill="#A78BFA"/>
+<text class="ni" x="638" y="137.0" fill="#A78BFA">S-04</text>
+<text class="nt" x="638" y="150.0">Mở form payment request</text>
+</g>
+<g><title>S-05 — Địa chỉ nhà cung cấp, số tiền, loại tài sản, mã tham chiếu.</title>
+<rect x="786" y="49.0" width="142" height="50" rx="7" fill="#101C29" stroke="#4C9AFF" stroke-width="1.1"/>
+<rect x="786" y="49.0" width="3" height="50" rx="1.5" fill="#4C9AFF"/>
+<text class="ni" x="794" y="61.0" fill="#4C9AFF">S-05</text>
+<text class="nt" x="794" y="74.0">Nhập dữ liệu lệnh chi</text>
+</g>
+<g><title>S-06 — Amount &gt; 0, asset được hỗ trợ, vendor là địa chỉ Stellar hợp lệ.</title>
+<rect x="942" y="201.0" width="142" height="50" rx="7" fill="#141C24" stroke="#7D93AB" stroke-width="1.1"/>
+<rect x="942" y="201.0" width="3" height="50" rx="1.5" fill="#7D93AB"/>
+<text class="ni" x="950" y="213.0" fill="#7D93AB">S-06</text>
+<text class="nt" x="950" y="226.0">Validate dữ liệu</text>
+</g>
+<g><title>S-07 — Không tạo request khi còn field lỗi.</title>
+<rect x="1098" y="201.0" width="142" height="50" rx="7" fill="#221C0E" stroke="#F0B429" stroke-width="1.1"/>
+<rect x="1098" y="201.0" width="3" height="50" rx="1.5" fill="#F0B429"/>
+<text class="ni" x="1106" y="213.0" fill="#F0B429">S-07</text>
+<text class="nt" x="1106" y="226.0">Dữ liệu hợp lệ?</text>
+</g>
+<g><title>S-08 — Sửa tại chỗ rồi kiểm lại; không dùng toast chung chung.</title>
+<rect x="1254" y="125.0" width="142" height="50" rx="7" fill="#201013" stroke="#F2555A" stroke-width="1.1"/>
+<rect x="1254" y="125.0" width="3" height="50" rx="1.5" fill="#F2555A"/>
+<text class="ni" x="1262" y="137.0" fill="#F2555A">S-08</text>
+<text class="nt" x="1262" y="150.0">Báo lỗi đúng trường</text>
+</g>
+<g><title>S-09 — Ghi lệnh chi lên chain. Contract KHÔNG giữ tiền.</title>
+<rect x="1254" y="277.0" width="142" height="50" rx="7" fill="#141C24" stroke="#7D93AB" stroke-width="1.1"/>
+<rect x="1254" y="277.0" width="3" height="50" rx="1.5" fill="#7D93AB"/>
+<text class="ni" x="1262" y="289.0" fill="#7D93AB">S-09</text>
+<text class="nt" x="1262" y="302.0">create_request() vào</text>
+<text class="nt" x="1262" y="313.0">registry</text>
+</g>
+<g><title>S-10 — Chỉ tin trạng thái đọc lại từ contract, không tin kết quả submit.</title>
+<rect x="1410" y="201.0" width="142" height="50" rx="7" fill="#221C0E" stroke="#F0B429" stroke-width="1.1"/>
+<rect x="1410" y="201.0" width="3" height="50" rx="1.5" fill="#F0B429"/>
+<text class="ni" x="1418" y="213.0" fill="#F0B429">S-10</text>
+<text class="nt" x="1418" y="226.0">Readback: đã Pending?</text>
+</g>
+<g><title>S-11 — Đọc lại theo id deterministic; không tạo request thứ hai.</title>
+<rect x="1566" y="201.0" width="142" height="50" rx="7" fill="#201013" stroke="#F2555A" stroke-width="1.1"/>
+<rect x="1566" y="201.0" width="3" height="50" rx="1.5" fill="#F2555A"/>
+<text class="ni" x="1574" y="213.0" fill="#F2555A">S-11</text>
+<text class="nt" x="1574" y="226.0">Kết quả chưa rõ ·</text>
+<text class="nt" x="1574" y="237.0">readback</text>
+</g>
+<g><title>S-12 — Đã có trên chain, chờ phê duyệt nội bộ.</title>
+<rect x="1566" y="277.0" width="142" height="50" rx="7" fill="#0F2018" stroke="#2FBF71" stroke-width="1.1"/>
+<rect x="1566" y="277.0" width="3" height="50" rx="1.5" fill="#2FBF71"/>
+<text class="ni" x="1574" y="289.0" fill="#2FBF71">S-12</text>
+<text class="nt" x="1574" y="302.0">Request ở trạng thái</text>
+<text class="nt" x="1574" y="313.0">Pending</text>
+</g>
+<g><title>S-13 — Gửi link màn hình duyệt kèm id lệnh chi.</title>
+<rect x="1722" y="201.0" width="142" height="50" rx="7" fill="#141C24" stroke="#7D93AB" stroke-width="1.1"/>
+<rect x="1722" y="201.0" width="3" height="50" rx="1.5" fill="#7D93AB"/>
+<text class="ni" x="1730" y="213.0" fill="#7D93AB">S-13</text>
+<text class="nt" x="1730" y="226.0">Thông báo cho approver</text>
+</g>
+</svg></div>  <div class="lgd">
+    <span class="lgi"><i style="background:#4C9AFF"></i>người dùng</span>
+    <span class="lgi"><i style="background:#A78BFA"></i>giao diện</span>
+    <span class="lgi"><i style="background:#7D93AB"></i>hệ thống</span>
+    <span class="lgi"><i style="background:#F0B429"></i>rẽ nhánh</span>
+    <span class="lgi"><i style="background:#F2555A"></i>lỗi &amp; phục hồi</span>
+    <span class="lgi"><i style="background:#2FBF71"></i>hoàn tất</span>
+  </div>
+<div class="nodes">
+<div class="nd interface"><div class="id">S-01 · App tối thiểu · interface</div><div class="ti">Mở app SOW 1</div><div class="de">Công cụ nội bộ, chỉ người trong doanh nghiệp truy cập.</div></div>
+<div class="nd user"><div class="id">S-02 · Doanh nghiệp · user</div><div class="ti">Kết nối ví &amp; ký challenge</div><div class="de">Chứng minh quyền kiểm soát địa chỉ; không chuyển tài sản.</div></div>
+<div class="nd system"><div class="id">S-03 · Backend · system</div><div class="ti">Xác minh chữ ký</div><div class="de">Nonce một lần, gắn domain và network, chống replay.</div></div>
+<div class="nd interface"><div class="id">S-04 · App tối thiểu · interface</div><div class="ti">Mở form payment request</div><div class="de">Bốn trường theo đúng SOW: vendor, amount, asset, reference.</div></div>
+<div class="nd user"><div class="id">S-05 · Doanh nghiệp · user</div><div class="ti">Nhập dữ liệu lệnh chi</div><div class="de">Địa chỉ nhà cung cấp, số tiền, loại tài sản, mã tham chiếu.</div></div>
+<div class="nd system"><div class="id">S-06 · Backend · system</div><div class="ti">Validate dữ liệu</div><div class="de">Amount &gt; 0, asset được hỗ trợ, vendor là địa chỉ Stellar hợp lệ.</div></div>
+<div class="nd decision"><div class="id">S-07 · Backend · decision</div><div class="ti">Dữ liệu hợp lệ?</div><div class="de">Không tạo request khi còn field lỗi.</div></div>
+<div class="nd error"><div class="id">S-08 · App tối thiểu · error</div><div class="ti">Báo lỗi đúng trường</div><div class="de">Sửa tại chỗ rồi kiểm lại; không dùng toast chung chung.</div></div>
+<div class="nd system"><div class="id">S-09 · Registry contract · system</div><div class="ti">create_request() vào registry</div><div class="de">Ghi lệnh chi lên chain. Contract KHÔNG giữ tiền.</div></div>
+<div class="nd decision"><div class="id">S-10 · Backend · decision</div><div class="ti">Readback: đã Pending?</div><div class="de">Chỉ tin trạng thái đọc lại từ contract, không tin kết quả submit.</div></div>
+<div class="nd error"><div class="id">S-11 · Backend · error</div><div class="ti">Kết quả chưa rõ · readback</div><div class="de">Đọc lại theo id deterministic; không tạo request thứ hai.</div></div>
+<div class="nd success"><div class="id">S-12 · Registry contract · success</div><div class="ti">Request ở trạng thái Pending</div><div class="de">Đã có trên chain, chờ phê duyệt nội bộ.</div></div>
+<div class="nd system"><div class="id">S-13 · Backend · system</div><div class="ti">Thông báo cho approver</div><div class="de">Gửi link màn hình duyệt kèm id lệnh chi.</div></div>
+</div>  <div class="note d"><b>S-10 và S-11 là cặp node hay bị làm sai nhất</b>
+    "Kết quả chưa rõ" <b>không phải</b> là lỗi để hiện toast rồi cho bấm lại. Đúng quy trình: (1) đọc lại theo request id deterministic; (2) nếu thấy Pending thì coi như thành công; (3) chỉ khi đọc không thấy sau vài lần backoff mới cho tạo mới với idempotency key mới. Đường quay lại từ <code>S-11</code> về <code>S-09</code> là vòng <b>readback</b>, không phải vòng submit lại.</div>
+</section>
+
+<!-- 07 FLOW B -->
+<section class="sl" data-sec="Flow" data-t="Flow · Duyệt & chi tiền">
+  <div class="kk">Luồng nghiệp vụ · phần 2/2</div>
+  <h1 class="sm">Từ phê duyệt 2/3 đến evidence hoàn chỉnh</h1>
+  <p class="ld">Mười bảy bước. Đây là phần chứa toàn bộ giá trị của SOW 1 — và cũng là phần mà một lỗi xử lý ngoại lệ có thể dẫn tới chi tiền hai lần.</p>
+<div class="viz"><svg viewBox="0 0 2386 432" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Luồng nghiệp vụ SOW 1 phần B" style="min-width:1500px">
+<defs>
+<marker id="fflow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5.5" markerHeight="5.5" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#4A5F75"/></marker>
+<marker id="fsuccess" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5.5" markerHeight="5.5" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#2FBF71"/></marker>
+<marker id="ferror" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5.5" markerHeight="5.5" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#F2555A"/></marker>
+<marker id="fopen" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5.5" markerHeight="5.5" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#22D3EE"/></marker>
+</defs><style>svg .nt{font-size:9.6px;fill:#F2F7FC;font-weight:650}svg .ni{font-size:7.8px;font-family:ui-monospace,Menlo,monospace}svg .ll{font-size:9.4px;fill:#6F8296;font-weight:700}svg .el{font-size:7.6px;fill:#7D93AB}</style>
+<rect x="0" y="36" width="2386" height="76" fill="#0D141B"/>
+<line x1="0" y1="36" x2="2386" y2="36" stroke="#18222E"/>
+<text class="ll" x="6" y="52">Approver (2/3)</text>
+<rect x="0" y="112" width="2386" height="76" fill="#0A1017"/>
+<line x1="0" y1="112" x2="2386" y2="112" stroke="#18222E"/>
+<text class="ll" x="6" y="128">App tối thiểu</text>
+<rect x="0" y="188" width="2386" height="76" fill="#0D141B"/>
+<line x1="0" y1="188" x2="2386" y2="188" stroke="#18222E"/>
+<text class="ll" x="6" y="204">Backend</text>
+<rect x="0" y="264" width="2386" height="76" fill="#0A1017"/>
+<line x1="0" y1="264" x2="2386" y2="264" stroke="#18222E"/>
+<text class="ll" x="6" y="280">Registry contract</text>
+<rect x="0" y="340" width="2386" height="76" fill="#0D141B"/>
+<line x1="0" y1="340" x2="2386" y2="340" stroke="#18222E"/>
+<text class="ll" x="6" y="356">Stellar / Treasury</text>
+<line x1="152" y1="36" x2="152" y2="416" stroke="#22303F"/>
+<path d="M304 150.0 C311.0 150.0,311.0 226.0,318 226.0" stroke="#4A5F75" stroke-width="1.2" fill="none" marker-end="url(#fflow)" opacity=".9"/>
+<text class="el" x="311.0" y="185.0" text-anchor="middle">chuẩn bị tx</text>
+<path d="M460 226.0 C467.0 226.0,467.0 226.0,474 226.0" stroke="#4A5F75" stroke-width="1.2" fill="none" marker-end="url(#fflow)" opacity=".9"/>
+<path d="M616 226.0 C623.0 226.0,623.0 74.0,630 74.0" stroke="#4A5F75" stroke-width="1.2" fill="none" marker-end="url(#fflow)" opacity=".9"/>
+<text class="el" x="623.0" y="147.0" text-anchor="middle">hiện tx để ký</text>
+<path d="M772 74.0 C779.0 74.0,779.0 226.0,786 226.0" stroke="#4A5F75" stroke-width="1.2" fill="none" marker-end="url(#fflow)" opacity=".9"/>
+<text class="el" x="779.0" y="147.0" text-anchor="middle">quyết định</text>
+<path d="M928 226.0 C935.0 226.0,935.0 302.0,942 302.0" stroke="#F2555A" stroke-width="1.2" fill="none" marker-end="url(#ferror)" opacity=".9"/>
+<text class="el" x="935.0" y="261.0" text-anchor="middle">từ chối</text>
+<path d="M928 226.0 C935.0 226.0,935.0 74.0,942 74.0" stroke="#2FBF71" stroke-width="1.2" fill="none" marker-end="url(#fsuccess)" opacity=".9"/>
+<text class="el" x="935.0" y="147.0" text-anchor="middle">đồng ý</text>
+<path d="M1084 74.0 C1091.0 74.0,1091.0 226.0,1098 226.0" stroke="#4A5F75" stroke-width="1.2" fill="none" marker-end="url(#fflow)" opacity=".9"/>
+<text class="el" x="1091.0" y="147.0" text-anchor="middle">chữ ký</text>
+<path d="M1240 226.0 C1247.0 226.0,1247.0 226.0,1254 226.0" stroke="#4A5F75" stroke-width="1.2" fill="none" marker-end="url(#fflow)" opacity=".9"/>
+<path d="M1396 226.0 C1403.0 226.0,1403.0 150.0,1410 150.0" stroke="#22D3EE" stroke-width="1.2" fill="none" marker-end="url(#fopen)" opacity=".9"/>
+<text class="el" x="1403.0" y="185.0" text-anchor="middle">chưa đủ</text>
+<path d="M1481.0 175.0 C1481.0 180.0,701.0 180.0,701.0 99.0" stroke="#22D3EE" stroke-width="1.1" fill="none" stroke-dasharray="3 3" marker-end="url(#fopen)" opacity=".85"/>
+<path d="M1396 226.0 C1403.0 226.0,1403.0 302.0,1410 302.0" stroke="#2FBF71" stroke-width="1.2" fill="none" marker-end="url(#fsuccess)" opacity=".9"/>
+<text class="el" x="1403.0" y="261.0" text-anchor="middle">đủ 2/3</text>
+<path d="M1552 302.0 C1559.0 302.0,1559.0 226.0,1566 226.0" stroke="#4A5F75" stroke-width="1.2" fill="none" marker-end="url(#fflow)" opacity=".9"/>
+<text class="el" x="1559.0" y="261.0" text-anchor="middle">authorize</text>
+<path d="M1708 226.0 C1715.0 226.0,1715.0 378.0,1722 378.0" stroke="#4A5F75" stroke-width="1.2" fill="none" marker-end="url(#fflow)" opacity=".9"/>
+<text class="el" x="1715.0" y="299.0" text-anchor="middle">submit</text>
+<path d="M1864 378.0 C1871.0 378.0,1871.0 226.0,1878 226.0" stroke="#4A5F75" stroke-width="1.2" fill="none" marker-end="url(#fflow)" opacity=".9"/>
+<text class="el" x="1871.0" y="299.0" text-anchor="middle">ledger</text>
+<path d="M2020 226.0 C2027.0 226.0,2027.0 226.0,2034 226.0" stroke="#F2555A" stroke-width="1.2" fill="none" marker-end="url(#ferror)" opacity=".9"/>
+<path d="M2105.0 251.0 C2105.0 256.0,1949.0 256.0,1949.0 251.0" stroke="#F2555A" stroke-width="1.1" fill="none" stroke-dasharray="3 3" marker-end="url(#ferror)" opacity=".85"/>
+<path d="M2020 226.0 C2027.0 226.0,2027.0 302.0,2034 302.0" stroke="#2FBF71" stroke-width="1.2" fill="none" marker-end="url(#fsuccess)" opacity=".9"/>
+<text class="el" x="2027.0" y="261.0" text-anchor="middle">confirmed</text>
+<path d="M2176 302.0 C2183.0 302.0,2183.0 150.0,2190 150.0" stroke="#2FBF71" stroke-width="1.2" fill="none" marker-end="url(#fsuccess)" opacity=".9"/>
+<text class="el" x="2183.0" y="223.0" text-anchor="middle">ghi evidence</text>
+<g><title>S-14 — Hiện vendor, số tiền, tham chiếu và ai đã ký.</title>
+<rect x="162" y="125.0" width="142" height="50" rx="7" fill="#1A1630" stroke="#A78BFA" stroke-width="1.1"/>
+<rect x="162" y="125.0" width="3" height="50" rx="1.5" fill="#A78BFA"/>
+<text class="ni" x="170" y="137.0" fill="#A78BFA">S-14</text>
+<text class="nt" x="170" y="150.0">Approver mở màn hình</text>
+<text class="nt" x="170" y="161.0">duyệt</text>
+</g>
+<g><title>S-15 — Payment tx từ treasury tới vendor, memo = request id.</title>
+<rect x="318" y="201.0" width="142" height="50" rx="7" fill="#141C24" stroke="#7D93AB" stroke-width="1.1"/>
+<rect x="318" y="201.0" width="3" height="50" rx="1.5" fill="#7D93AB"/>
+<text class="ni" x="326" y="213.0" fill="#7D93AB">S-15</text>
+<text class="nt" x="326" y="226.0">build_unsigned() dựng tx</text>
+</g>
+<g><title>S-16 — Một lệnh đang bay mỗi treasury; chống tranh chấp seq.</title>
+<rect x="474" y="201.0" width="142" height="50" rx="7" fill="#141C24" stroke="#7D93AB" stroke-width="1.1"/>
+<rect x="474" y="201.0" width="3" height="50" rx="1.5" fill="#7D93AB"/>
+<text class="ni" x="482" y="213.0" fill="#7D93AB">S-16</text>
+<text class="nt" x="482" y="226.0">Khoá sequence của</text>
+<text class="nt" x="482" y="237.0">treasury</text>
+</g>
+<g><title>S-17 — Kiểm tra vendor và số tiền trước khi ký.</title>
+<rect x="630" y="49.0" width="142" height="50" rx="7" fill="#101C29" stroke="#4C9AFF" stroke-width="1.1"/>
+<rect x="630" y="49.0" width="3" height="50" rx="1.5" fill="#4C9AFF"/>
+<text class="ni" x="638" y="61.0" fill="#4C9AFF">S-17</text>
+<text class="nt" x="638" y="74.0">Approver xem và quyết</text>
+<text class="nt" x="638" y="85.0">định</text>
+</g>
+<g><title>S-18 — Nhánh reject phải dừng hẳn việc submit.</title>
+<rect x="786" y="201.0" width="142" height="50" rx="7" fill="#221C0E" stroke="#F0B429" stroke-width="1.1"/>
+<rect x="786" y="201.0" width="3" height="50" rx="1.5" fill="#F0B429"/>
+<text class="ni" x="794" y="213.0" fill="#F0B429">S-18</text>
+<text class="nt" x="794" y="226.0">Từ chối?</text>
+</g>
+<g><title>S-19 — Ghi trạng thái trên chain, khẳng định không có tx nào rời treasury.</title>
+<rect x="942" y="277.0" width="142" height="50" rx="7" fill="#201013" stroke="#F2555A" stroke-width="1.1"/>
+<rect x="942" y="277.0" width="3" height="50" rx="1.5" fill="#F2555A"/>
+<text class="ni" x="950" y="289.0" fill="#F2555A">S-19</text>
+<text class="nt" x="950" y="302.0">Cancelled · không submit</text>
+</g>
+<g><title>S-20 — Chữ ký trên đúng hash đã dựng; đổi seq là chữ ký vô hiệu.</title>
+<rect x="942" y="49.0" width="142" height="50" rx="7" fill="#101C29" stroke="#4C9AFF" stroke-width="1.1"/>
+<rect x="942" y="49.0" width="3" height="50" rx="1.5" fill="#4C9AFF"/>
+<text class="ni" x="950" y="61.0" fill="#4C9AFF">S-20</text>
+<text class="nt" x="950" y="74.0">Ký tx hash trong ví</text>
+</g>
+<g><title>S-21 — ed25519 trên tx hash, signer phải thuộc policy đã ghim.</title>
+<rect x="1098" y="201.0" width="142" height="50" rx="7" fill="#141C24" stroke="#7D93AB" stroke-width="1.1"/>
+<rect x="1098" y="201.0" width="3" height="50" rx="1.5" fill="#7D93AB"/>
+<text class="ni" x="1106" y="213.0" fill="#7D93AB">S-21</text>
+<text class="nt" x="1106" y="226.0">Verify chữ ký &amp; cộng</text>
+<text class="nt" x="1106" y="237.0">weight</text>
+</g>
+<g><title>S-22 — Cộng dồn weight của các signer đã ký.</title>
+<rect x="1254" y="201.0" width="142" height="50" rx="7" fill="#221C0E" stroke="#F0B429" stroke-width="1.1"/>
+<rect x="1254" y="201.0" width="3" height="50" rx="1.5" fill="#F0B429"/>
+<text class="ni" x="1262" y="213.0" fill="#F0B429">S-22</text>
+<text class="nt" x="1262" y="226.0">Đủ threshold 2/3?</text>
+</g>
+<g><title>S-23 — Hiện tiến độ 1/2 và thời hạn timebounds của tx.</title>
+<rect x="1410" y="125.0" width="142" height="50" rx="7" fill="#1A1630" stroke="#A78BFA" stroke-width="1.1"/>
+<rect x="1410" y="125.0" width="3" height="50" rx="1.5" fill="#A78BFA"/>
+<text class="ni" x="1418" y="137.0" fill="#A78BFA">S-23</text>
+<text class="nt" x="1418" y="150.0">Chờ approver tiếp theo</text>
+</g>
+<g><title>S-24 — Chỉ khi đủ weight mới chuyển trạng thái trên chain.</title>
+<rect x="1410" y="277.0" width="142" height="50" rx="7" fill="#141C24" stroke="#7D93AB" stroke-width="1.1"/>
+<rect x="1410" y="277.0" width="3" height="50" rx="1.5" fill="#7D93AB"/>
+<text class="ni" x="1418" y="289.0" fill="#7D93AB">S-24</text>
+<text class="nt" x="1418" y="302.0">approve() → Approved</text>
+</g>
+<g><title>S-25 — DecoratedSignature đúng hint, gửi lên Horizon.</title>
+<rect x="1566" y="201.0" width="142" height="50" rx="7" fill="#141C24" stroke="#7D93AB" stroke-width="1.1"/>
+<rect x="1566" y="201.0" width="3" height="50" rx="1.5" fill="#7D93AB"/>
+<text class="ni" x="1574" y="213.0" fill="#7D93AB">S-25</text>
+<text class="nt" x="1574" y="226.0">Ghép chữ ký &amp; submit</text>
+</g>
+<g><title>S-26 — Treasury chi tới địa chỉ vendor.</title>
+<rect x="1722" y="353.0" width="142" height="50" rx="7" fill="#141C24" stroke="#7D93AB" stroke-width="1.1"/>
+<rect x="1722" y="353.0" width="3" height="50" rx="1.5" fill="#7D93AB"/>
+<text class="ni" x="1730" y="365.0" fill="#7D93AB">S-26</text>
+<text class="nt" x="1730" y="378.0">Stellar xử lý payment</text>
+</g>
+<g><title>S-27 — Confirmed, failed dứt khoát, hoặc chưa rõ.</title>
+<rect x="1878" y="201.0" width="142" height="50" rx="7" fill="#221C0E" stroke="#F0B429" stroke-width="1.1"/>
+<rect x="1878" y="201.0" width="3" height="50" rx="1.5" fill="#F0B429"/>
+<text class="ni" x="1886" y="213.0" fill="#F0B429">S-27</text>
+<text class="nt" x="1886" y="226.0">Outcome?</text>
+</g>
+<g><title>S-28 — tx_bad_seq và timeout xử lý như nhau: đọc chain trước.</title>
+<rect x="2034" y="201.0" width="142" height="50" rx="7" fill="#201013" stroke="#F2555A" stroke-width="1.1"/>
+<rect x="2034" y="201.0" width="3" height="50" rx="1.5" fill="#F2555A"/>
+<text class="ni" x="2042" y="213.0" fill="#F2555A">S-28</text>
+<text class="nt" x="2042" y="226.0">Reconcile trước khi</text>
+<text class="nt" x="2042" y="237.0">retry</text>
+</g>
+<g><title>S-29 — Registry ghi Paid kèm tx hash sau readback.</title>
+<rect x="2034" y="277.0" width="142" height="50" rx="7" fill="#0F2018" stroke="#2FBF71" stroke-width="1.1"/>
+<rect x="2034" y="277.0" width="3" height="50" rx="1.5" fill="#2FBF71"/>
+<text class="ni" x="2042" y="289.0" fill="#2FBF71">S-29</text>
+<text class="nt" x="2042" y="302.0">mark_paid() → Paid</text>
+</g>
+<g><title>S-30 — Tx hash từng mốc + link Stellar Expert cho reviewer.</title>
+<rect x="2190" y="125.0" width="142" height="50" rx="7" fill="#0F2018" stroke="#2FBF71" stroke-width="1.1"/>
+<rect x="2190" y="125.0" width="3" height="50" rx="1.5" fill="#2FBF71"/>
+<text class="ni" x="2198" y="137.0" fill="#2FBF71">S-30</text>
+<text class="nt" x="2198" y="150.0">Evidence đầy đủ</text>
+</g>
+</svg></div><div class="nodes">
+<div class="nd interface"><div class="id">S-14 · App tối thiểu · interface</div><div class="ti">Approver mở màn hình duyệt</div><div class="de">Hiện vendor, số tiền, tham chiếu và ai đã ký.</div></div>
+<div class="nd system"><div class="id">S-15 · Backend · system</div><div class="ti">build_unsigned() dựng tx</div><div class="de">Payment tx từ treasury tới vendor, memo = request id.</div></div>
+<div class="nd system"><div class="id">S-16 · Backend · system</div><div class="ti">Khoá sequence của treasury</div><div class="de">Một lệnh đang bay mỗi treasury; chống tranh chấp seq.</div></div>
+<div class="nd user"><div class="id">S-17 · Approver (2/3) · user</div><div class="ti">Approver xem và quyết định</div><div class="de">Kiểm tra vendor và số tiền trước khi ký.</div></div>
+<div class="nd decision"><div class="id">S-18 · Backend · decision</div><div class="ti">Từ chối?</div><div class="de">Nhánh reject phải dừng hẳn việc submit.</div></div>
+<div class="nd error"><div class="id">S-19 · Registry contract · error</div><div class="ti">Cancelled · không submit</div><div class="de">Ghi trạng thái trên chain, khẳng định không có tx nào rời treasury.</div></div>
+<div class="nd user"><div class="id">S-20 · Approver (2/3) · user</div><div class="ti">Ký tx hash trong ví</div><div class="de">Chữ ký trên đúng hash đã dựng; đổi seq là chữ ký vô hiệu.</div></div>
+<div class="nd system"><div class="id">S-21 · Backend · system</div><div class="ti">Verify chữ ký &amp; cộng weight</div><div class="de">ed25519 trên tx hash, signer phải thuộc policy đã ghim.</div></div>
+<div class="nd decision"><div class="id">S-22 · Backend · decision</div><div class="ti">Đủ threshold 2/3?</div><div class="de">Cộng dồn weight của các signer đã ký.</div></div>
+<div class="nd interface"><div class="id">S-23 · App tối thiểu · interface</div><div class="ti">Chờ approver tiếp theo</div><div class="de">Hiện tiến độ 1/2 và thời hạn timebounds của tx.</div></div>
+<div class="nd system"><div class="id">S-24 · Registry contract · system</div><div class="ti">approve() → Approved</div><div class="de">Chỉ khi đủ weight mới chuyển trạng thái trên chain.</div></div>
+<div class="nd system"><div class="id">S-25 · Backend · system</div><div class="ti">Ghép chữ ký &amp; submit</div><div class="de">DecoratedSignature đúng hint, gửi lên Horizon.</div></div>
+<div class="nd system"><div class="id">S-26 · Stellar / Treasury · system</div><div class="ti">Stellar xử lý payment</div><div class="de">Treasury chi tới địa chỉ vendor.</div></div>
+<div class="nd decision"><div class="id">S-27 · Backend · decision</div><div class="ti">Outcome?</div><div class="de">Confirmed, failed dứt khoát, hoặc chưa rõ.</div></div>
+<div class="nd error"><div class="id">S-28 · Backend · error</div><div class="ti">Reconcile trước khi retry</div><div class="de">tx_bad_seq và timeout xử lý như nhau: đọc chain trước.</div></div>
+<div class="nd success"><div class="id">S-29 · Registry contract · success</div><div class="ti">mark_paid() → Paid</div><div class="de">Registry ghi Paid kèm tx hash sau readback.</div></div>
+<div class="nd success"><div class="id">S-30 · App tối thiểu · success</div><div class="ti">Evidence đầy đủ</div><div class="de">Tx hash từng mốc + link Stellar Expert cho reviewer.</div></div>
+</div>  <div class="g g2">
+    <div class="c dn"><h4>S-16 · Khoá sequence — làm sớm, đừng để cuối</h4>
+      <p>Chữ ký gắn chặt vào <code>sequence</code> của treasury. Hai lệnh chi song song lấy cùng seq thì lệnh thứ hai chết bằng <code>tx_bad_seq</code> <b>sau khi</b> đã làm phiền hai người ký. Phải khoá ở tầng DB ngay Sprint 3, không để tới Sprint 4 mới phát hiện.</p></div>
+    <div class="c dn"><h4>S-28 · Reconcile — đường duy nhất ra khỏi "chưa rõ"</h4>
+      <p><code>tx_bad_seq</code> chỉ nói seq đã bị tiêu, <b>không nói ai tiêu</b>. Nguyên nhân phổ biến nhất là chính lệnh đó đã lên ledger. Dựng transaction mới rồi thu lại chữ ký = chi tiền lần thứ hai. Xử lý y hệt timeout: đọc chain theo memo trước, submit lại đúng envelope cũ, chỉ rebuild khi chắc chắn.</p></div>
+  </div>
+
+  <h2><span class="n">7.1</span> Máy trạng thái của một lệnh chi</h2>
+  <div class="viz">
+  <svg viewBox="0 0 1000 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Máy trạng thái lệnh chi">
+    <defs>
+      <marker id="m1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#2FBF71"/></marker>
+      <marker id="m2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#F2555A"/></marker>
+      <marker id="m3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#7D93AB"/></marker>
+    </defs>
+    <style>svg .st{font-size:13px;fill:#F2F7FC;font-weight:750}svg .ss{font-size:9.5px;fill:#7D93AB}svg .se{font-size:10px;fill:#8FA3B8}</style>
+    <rect x="20" y="62" width="150" height="56" rx="10" fill="#221C0E" stroke="#F0B429"/>
+    <text class="st" x="38" y="88">Pending</text><text class="ss" x="38" y="104">vừa tạo, chờ duyệt</text>
+    <rect x="290" y="62" width="150" height="56" rx="10" fill="#101E33" stroke="#4C9AFF"/>
+    <text class="st" x="308" y="88">Approved</text><text class="ss" x="308" y="104">đủ 2/3 chữ ký</text>
+    <rect x="560" y="62" width="150" height="56" rx="10" fill="#0F2018" stroke="#2FBF71"/>
+    <text class="st" x="578" y="88">Paid</text><text class="ss" x="578" y="104">đã chi, có tx hash</text>
+    <rect x="290" y="150" width="420" height="40" rx="10" fill="#201013" stroke="#F2555A"/>
+    <text class="st" x="308" y="176" style="font-size:12px">Cancelled — dừng hẳn, không transaction nào rời treasury</text>
+    <rect x="800" y="62" width="180" height="56" rx="10" fill="#1E1A10" stroke="#F0B429" stroke-dasharray="4 3"/>
+    <text class="st" x="818" y="88" style="font-size:12px">Chưa rõ</text><text class="ss" x="818" y="104">chỉ ra bằng reconcile</text>
+    <g fill="none" stroke="#2FBF71" stroke-width="1.4" marker-end="url(#m1)">
+      <path d="M170 90 L288 90"/><path d="M440 90 L558 90"/>
+    </g>
+    <g fill="none" stroke="#F2555A" stroke-width="1.4" marker-end="url(#m2)">
+      <path d="M95 118 C95 170,180 170,288 170"/><path d="M365 118 L365 148"/>
+    </g>
+    <g fill="none" stroke="#7D93AB" stroke-width="1.3" stroke-dasharray="4 3" marker-end="url(#m3)"><path d="M710 90 L798 90"/></g>
+    <g fill="none" stroke="#2FBF71" stroke-width="1.3" stroke-dasharray="4 3" marker-end="url(#m1)"><path d="M890 62 C890 20,700 20,650 58"/></g>
+    <text class="se" x="176" y="82">approve()</text><text class="se" x="446" y="82">mark_paid()</text>
+    <text class="se" x="150" y="160">từ chối</text><text class="se" x="372" y="140">từ chối</text>
+    <text class="se" x="720" y="82">timeout / bad_seq</text>
+    <text class="se" x="700" y="24">readback thấy đã chi</text>
+  </svg>
+  </div>
+  <p style="font-size:13px;color:var(--tx3)">Trạng thái <b>Chưa rõ</b> chỉ tồn tại ở tầng backend, không có trên chain. Nó là trạng thái hạng nhất trong mọi máy trạng thái của hệ thống, không phải một trường hợp biên.</p>
+</section>
+
+<!-- 08 UI 1 -->
+<section class="sl" data-sec="UI/UX" data-t="UI · Tạo lệnh & danh sách">
+  <div class="kk">Giao diện tối thiểu · 1/2</div>
+  <h1 class="sm">Bốn màn hình, không hơn</h1>
+  <p class="ld">SOW ghi rõ dashboard nằm ngoài phạm vi. Bốn màn hình dưới đây là mức tối thiểu để <b>chứng minh deliverable</b> — mỗi màn hình tồn tại vì có một thứ trong evidence cần nó, không phải vì đẹp.</p>
+
+  <div class="wins">
+    <div>
+      <div class="win">
+        <div class="wt"><i></i><i></i><i></i><span class="u">app.settleflow.internal/requests/new</span></div>
+        <div class="wb">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div style="font-size:14px;font-weight:750">Tạo lệnh chi</div>
+            <span class="pill n">Testnet</span></div>
+          <div class="hr"></div>
+          <div><div class="fl">Vendor address</div><div class="fi fc">GDX7…P4LM</div>
+            <div style="font-size:9px;color:#5BE49B;margin-top:3px">✓ Địa chỉ hợp lệ · có trustline USDC</div></div>
+          <div style="display:flex;gap:10px">
+            <div style="flex:2"><div class="fl">Amount</div><div class="fi">4,500.0000000</div></div>
+            <div style="flex:1"><div class="fl">Asset</div><div class="fi">USDC</div></div>
+          </div>
+          <div><div class="fl">Reference</div><div class="fi">PO-2026-0417</div></div>
+          <div class="hr"></div>
+          <div class="row"><span>Cần phê duyệt</span><b>2 / 3 chữ ký</b></div>
+          <div class="row"><span>Ghi lên</span><b style="font-family:var(--mono);font-size:10px">CBIE…9K2Q</b></div>
+          <div style="flex:1"></div>
+          <div class="btn">Tạo lệnh chi</div>
+        </div>
+      </div>
+      <div class="spec"><h5>Spec cho dev · E2</h5><dl>
+        <dt>Validate ngay tại field</dt><dd>Vendor address kiểm regex <code>^G[A-Z2-7]{55}$</code> rồi debounce 500ms gọi API kiểm account tồn tại + trustline. Nút disabled tới khi có dấu ✓.</dd>
+        <dt>Amount</dt><dd>Nhập dạng chuỗi, không dùng number input. Tối đa 7 chữ số thập phân. Hiển thị tabular figures.</dd>
+        <dt>Idempotency</dt><dd>Sinh UUID v4 khi mở form, gửi kèm header <code>Idempotency-Key</code>. Bấm hai lần không tạo hai lệnh.</dd>
+        <dt>Sau khi bấm</dt><dd>Chuyển sang trạng thái "Đang ghi lên chain", <b>không</b> hiện thành công cho tới khi readback trả về Pending (S-10).</dd>
+      </dl></div>
+    </div>
+
+    <div>
+      <div class="win">
+        <div class="wt"><i></i><i></i><i></i><span class="u">app.settleflow.internal/requests</span></div>
+        <div class="wb">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div style="font-size:14px;font-weight:750">Lệnh chi</div>
+            <span style="font-size:10px;color:#6F8296">4 lệnh</span></div>
+          <div class="hr"></div>
+          <div class="row"><div><b style="font-size:12px">PO-2026-0417</b>
+            <div style="font-size:9.5px;color:#6F8296;margin-top:2px">GDX7…P4LM · 4,500 USDC</div></div>
+            <div style="text-align:right"><span class="pill w">Pending</span>
+            <div style="font-size:9px;color:#6F8296;margin-top:3px">1/2 chữ ký</div></div></div>
+          <div class="hr"></div>
+          <div class="row"><div><b style="font-size:12px">PO-2026-0416</b>
+            <div style="font-size:9.5px;color:#6F8296;margin-top:2px">GBQK…4T7M · 1,200 USDC</div></div>
+            <div style="text-align:right"><span class="pill b">Approved</span>
+            <div style="font-size:9px;color:#6F8296;margin-top:3px">đang submit</div></div></div>
+          <div class="hr"></div>
+          <div class="row"><div><b style="font-size:12px">PO-2026-0412</b>
+            <div style="font-size:9.5px;color:#6F8296;margin-top:2px">GA5Z…8H3N · 890 USDC</div></div>
+            <div style="text-align:right"><span class="pill ok">Paid</span>
+            <div style="font-size:9px;color:#7FB6FF;margin-top:3px">a91f…2c8d ↗</div></div></div>
+          <div class="hr"></div>
+          <div class="row"><div><b style="font-size:12px">PO-2026-0409</b>
+            <div style="font-size:9.5px;color:#6F8296;margin-top:2px">GCTY…1W9P · 3,000 USDC</div></div>
+            <div style="text-align:right"><span class="pill e">Cancelled</span>
+            <div style="font-size:9px;color:#6F8296;margin-top:3px">CFO từ chối</div></div></div>
+          <div style="flex:1"></div>
+          <div class="btn g">Tạo lệnh chi mới</div>
+        </div>
+      </div>
+      <div class="spec"><h5>Spec cho dev · E3</h5><dl>
+        <dt>Bốn trạng thái, bốn màu</dt><dd>Pending vàng, Approved xanh dương, Paid xanh lá, Cancelled đỏ. Luôn kèm chữ — màu không bao giờ là kênh thông tin duy nhất.</dd>
+        <dt>Dòng phụ</dt><dd>Pending hiện tiến độ chữ ký. Paid hiện tx hash rút gọn, bấm mở Stellar Expert. Cancelled hiện ai từ chối.</dd>
+        <dt>Nguồn dữ liệu</dt><dd>Đọc từ read-model, không gọi Horizon đồng bộ. Nếu độ trễ đồng bộ vượt 60 giây thì hiện banner "đang đồng bộ" và khoá nút tạo mới.</dd>
+        <dt>Không có gì thêm</dt><dd>Không biểu đồ, không thống kê, không xuất file. Đó là dashboard — nằm ngoài phạm vi SOW 1.</dd>
+      </dl></div>
+    </div>
+  </div>
+</section>
+
+<!-- 09 UI 2 -->
+<section class="sl" data-sec="UI/UX" data-t="UI · Ký duyệt & evidence">
+  <div class="kk">Giao diện tối thiểu · 2/2</div>
+  <h1 class="sm">Màn hình approver và trang bằng chứng</h1>
+  <p class="ld">Hai màn hình này là nơi giá trị của SOW 1 hiện ra. Màn hình ký là thứ chứng minh Deliverable 2; trang evidence là thứ Chapter Lead thực sự mở ra để nghiệm thu.</p>
+
+  <div class="wins">
+    <div>
+      <div class="win">
+        <div class="wt"><i></i><i></i><i></i><span class="u">app.settleflow.internal/approve/7hK2…9fQx</span></div>
+        <div class="wb">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div style="font-size:14px;font-weight:750">Duyệt lệnh chi</div>
+            <span class="pill w">Hết hạn sau 47:12</span></div>
+          <div class="hr"></div>
+          <div style="background:#121B25;border:1px solid #223040;border-radius:9px;padding:12px;text-align:center">
+            <div style="font-size:9px;color:#6F8296;text-transform:uppercase;letter-spacing:.7px">Chi cho nhà cung cấp</div>
+            <div style="font-size:22px;font-weight:750;margin-top:4px;letter-spacing:-.6px">4,500.00 <span style="font-size:12px;color:#6F8296">USDC</span></div>
+            <div style="font-size:10px;color:#7FB6FF;font-family:var(--mono);margin-top:4px">GDX7…P4LM</div>
+          </div>
+          <div class="row"><span>Tham chiếu</span><b>PO-2026-0417</b></div>
+          <div class="row"><span>Người tạo</span><b>Kế toán trưởng</b></div>
+          <div class="row"><span>Từ tài khoản</span><b style="font-family:var(--mono);font-size:10px">GTRE…5X8B</b></div>
+          <div class="hr"></div>
+          <div style="font-size:9px;color:#6F8296;font-weight:750;letter-spacing:.7px">TIẾN ĐỘ CHỮ KÝ · CẦN 2/3</div>
+          <div class="row" style="padding:4px 0"><span>CFO</span><span class="pill ok">Đã ký</span></div>
+          <div class="row" style="padding:4px 0"><span>Bạn (CEO)</span><span class="pill w">Đang chờ</span></div>
+          <div class="row" style="padding:4px 0"><span>Kiểm soát nội bộ</span><span class="pill n">Chưa cần</span></div>
+          <div style="flex:1"></div>
+          <div class="btn">Ký duyệt trong ví</div>
+          <div class="btn d">Từ chối lệnh chi</div>
+        </div>
+      </div>
+      <div class="spec"><h5>Spec cho dev · E4</h5><dl>
+        <dt>Ba thông tin lớn nhất</dt><dd>Số tiền, địa chỉ vendor, mã tham chiếu. Approver phải xác nhận được ba thứ này trong 5 giây mà không cuộn.</dd>
+        <dt>Đếm ngược</dt><dd>Là timebounds của transaction (1 giờ), không phải hạn của lệnh chi. Hết giờ thì nút ký disabled và hiện "cần dựng lại giao dịch".</dd>
+        <dt>Nút Từ chối</dt><dd>Cùng cấp thị giác với nút Ký, không giấu đi. Bấm xong hiện xác nhận một bước rồi mới gọi <code>cancel_request</code>.</dd>
+        <dt>Sau khi ký</dt><dd>Nếu chưa đủ ngưỡng → chuyển sang màn chờ (S-23) hiện 1/2. Nếu đủ → hiện "đang gửi giao dịch", <b>không</b> hiện đã chi.</dd>
+      </dl></div>
+    </div>
+
+    <div>
+      <div class="win">
+        <div class="wt"><i></i><i></i><i></i><span class="u">app.settleflow.internal/evidence/PO-2026-0412</span></div>
+        <div class="wb">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div style="font-size:14px;font-weight:750">Bằng chứng on-chain</div>
+            <span class="pill ok">Hoàn tất</span></div>
+          <div class="hr"></div>
+          <div class="row" style="padding:6px 0"><div><b style="font-size:11.5px">Deploy registry contract</b>
+            <div style="font-size:9px;color:#7FB6FF;font-family:var(--mono);margin-top:2px">CBIE…9K2Q ↗</div></div>
+            <span class="pill ok">✓</span></div>
+          <div class="row" style="padding:6px 0"><div><b style="font-size:11.5px">Treasury 3 signer · threshold 2</b>
+            <div style="font-size:9px;color:#7FB6FF;font-family:var(--mono);margin-top:2px">GTRE…5X8B ↗</div></div>
+            <span class="pill ok">✓</span></div>
+          <div class="row" style="padding:6px 0"><div><b style="font-size:11.5px">create_request</b>
+            <div style="font-size:9px;color:#7FB6FF;font-family:var(--mono);margin-top:2px">3f9a…7b1e ↗</div></div>
+            <span class="pill ok">✓</span></div>
+          <div class="row" style="padding:6px 0"><div><b style="font-size:11.5px">approve · đủ 2/3 chữ ký</b>
+            <div style="font-size:9px;color:#7FB6FF;font-family:var(--mono);margin-top:2px">c204…88af ↗</div></div>
+            <span class="pill ok">✓</span></div>
+          <div class="row" style="padding:6px 0"><div><b style="font-size:11.5px">Payment tới vendor</b>
+            <div style="font-size:9px;color:#7FB6FF;font-family:var(--mono);margin-top:2px">a91f…2c8d ↗</div></div>
+            <span class="pill ok">✓</span></div>
+          <div class="row" style="padding:6px 0"><div><b style="font-size:11.5px">mark_paid</b>
+            <div style="font-size:9px;color:#7FB6FF;font-family:var(--mono);margin-top:2px">de55…1a09 ↗</div></div>
+            <span class="pill ok">✓</span></div>
+          <div style="flex:1"></div>
+          <div class="btn g">Sao chép toàn bộ hash</div>
+        </div>
+      </div>
+      <div class="spec"><h5>Spec cho dev · E5</h5><dl>
+        <dt>Đây là màn hình quan trọng nhất của SOW 1</dt><dd>Chapter Lead nghiệm thu bằng chính trang này. Sáu dòng tương ứng sáu mốc bắt buộc trong bảng evidence.</dd>
+        <dt>Mọi hash đều bấm được</dt><dd>Link ra Stellar Expert testnet, mở tab mới. Hiển thị rút gọn 4 đầu – 4 cuối, hover hiện đầy đủ.</dd>
+        <dt>Nút sao chép</dt><dd>Xuất ra văn bản thuần dạng bảng để dán thẳng vào biểu mẫu nộp Instawards.</dd>
+        <dt>Dòng còn thiếu</dt><dd>Hiện dấu ○ xám thay vì ✓, để nhìn phát biết còn thiếu bằng chứng nào.</dd>
+      </dl></div>
+    </div>
+  </div>
+
+  <div class="note w"><b>Quy tắc chung cho cả bốn màn hình</b>
+    Không màn hình nào được hiển thị <b>thành công</b> trước khi đọc lại từ chain. Mọi hành động chạm chain đều trả HTTP <b>202</b> chứ không phải 200, và giao diện chuyển sang trạng thái chờ. Đây là cách hợp đồng API ép nguyên tắc "nguồn sự thật là chain" xuống tận nút bấm.</div>
+</section>
+
+<!-- 10 CONTRACT -->
+<section class="sl" data-sec="Kỹ thuật" data-t="Contract interface">
+  <div class="kk">Deliverable 1 · giao diện contract</div>
+  <h1 class="sm">payment_request_registry — hàm và trạng thái</h1>
+  <p class="ld">Contract này <b>không có hàm nào chuyển được token</b>. Đó là lý do nó lên testnet được trong 20 ngày mà không cần security audit — bề mặt rủi ro custody bằng không.</p>
+
+  <div class="ph">src/types.rs · trạng thái theo đúng SOW</div>
+<pre><span class="c1">// SOW nêu đích danh ba trạng thái: pending → approved → paid.</span>
+<span class="k">pub enum</span> <span class="t">ReqStatus</span> { Pending = <span class="nu">0</span>, Approved = <span class="nu">1</span>, Paid = <span class="nu">2</span>, Cancelled = <span class="nu">3</span> }
+
+<span class="k">pub struct</span> <span class="t">PaymentRequest</span> {
+    <span class="k">pub</span> id:        BytesN&lt;<span class="nu">32</span>&gt;,   <span class="c1">// sha256(business_id ‖ idempotency_key)</span>
+    <span class="k">pub</span> creator:   Address,       <span class="c1">// doanh nghiệp tạo lệnh — bên có quyền huỷ</span>
+    <span class="k">pub</span> payee:     Address,       <span class="c1">// VENDOR ADDRESS theo đúng SOW Deliverable 1</span>
+    <span class="k">pub</span> asset:     Address,       <span class="c1">// SAC của USDC hoặc của native XLM</span>
+    <span class="k">pub</span> amount:    i128,          <span class="c1">// stroops · 7 thập phân · không dùng float</span>
+    <span class="k">pub</span> reference: BytesN&lt;<span class="nu">32</span>&gt;,   <span class="c1">// HASH của mã tham chiếu, không lưu chuỗi thô lên chain</span>
+    <span class="k">pub</span> expiry:    u64,           <span class="c1">// ledger timestamp, không phải đồng hồ server</span>
+    <span class="k">pub</span> status:    ReqStatus,
+    <span class="k">pub</span> paid_tx:   Option&lt;BytesN&lt;<span class="nu">32</span>&gt;&gt;,
+}</pre>
+
+  <h2><span class="n">10.1</span> Ma trận hàm và quyền</h2>
+  <div class="tw"><table class="mono">
+    <thead><tr><th style="width:180px">Hàm</th><th style="width:170px">Ai gọi được</th><th>Điều kiện</th><th style="width:130px">Chạm tài sản?</th></tr></thead>
+    <tbody>
+      <tr><td>initialize</td><td>Admin, đúng một lần</td><td>Chưa từng khởi tạo. Bump TTL instance ngay tại đây.</td><td>Không</td></tr>
+      <tr><td>create_request</td><td>Doanh nghiệp, cho chính mình</td><td>amount &gt; 0, expiry ở tương lai, id chưa tồn tại</td><td>Không</td></tr>
+      <tr><td>approve</td><td><b>Chỉ settler</b></td><td>Đang Pending, chưa quá hạn. Backend gọi sau khi đã thu đủ weight.</td><td>Không</td></tr>
+      <tr><td>mark_paid</td><td><b>Chỉ settler</b></td><td>Chưa có paid_tx, đang Approved, chưa quá hạn, amount khớp</td><td>Không</td></tr>
+      <tr><td>cancel_request</td><td>Doanh nghiệp tạo lệnh</td><td>Chưa Paid</td><td>Không</td></tr>
+      <tr><td>get_request · is_payable</td><td>Bất kỳ ai — đọc qua RPC simulation</td><td>—</td><td>Không</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="note d"><b>Kiểm tra bắt buộc trước khi deploy</b>
+    Rà toàn bộ crate: không được xuất hiện <code>token::Client</code>, <code>transfer</code>, hay bất kỳ lời gọi nào tới Stellar Asset Contract. Nếu có, contract đã rời khỏi phạm vi "không custody" của SOW 1 và cần security review trước khi lên bất kỳ network nào. Đây là mục đầu tiên trong checklist review của Ngày 4.</div>
+
+  <h2><span class="n">10.2</span> Hợp đồng API giữa frontend và backend</h2>
+  <div class="tw"><table class="mono">
+    <thead><tr><th style="width:62px">Method</th><th style="width:250px">Path</th><th>Mô tả</th><th style="width:96px">Trả về</th></tr></thead>
+    <tbody>
+      <tr><td>POST</td><td>/auth/wallet/challenge</td><td>Sinh nonce challenge cho địa chỉ và network</td><td>200</td></tr>
+      <tr><td>POST</td><td>/auth/wallet/verify</td><td>Xác minh chữ ký → phiên làm việc</td><td>200</td></tr>
+      <tr><td>POST</td><td>/requests</td><td>Tạo lệnh chi. Bắt buộc header <code>Idempotency-Key</code></td><td><b>202</b></td></tr>
+      <tr><td>GET</td><td>/requests</td><td>Danh sách kèm trạng thái và tiến độ chữ ký</td><td>200</td></tr>
+      <tr><td>GET</td><td>/requests/:id</td><td>Chi tiết một lệnh chi</td><td>200</td></tr>
+      <tr><td>POST</td><td>/requests/:id/prepare</td><td>Dựng unsigned tx, khoá sequence, trả XDR + tx hash + valid_until</td><td>200</td></tr>
+      <tr><td>POST</td><td>/requests/:id/signatures</td><td>Approver nộp chữ ký trên tx hash</td><td>200</td></tr>
+      <tr><td>POST</td><td>/requests/:id/reject</td><td>Từ chối. Giải phóng sequence, gọi <code>cancel_request</code></td><td><b>202</b></td></tr>
+      <tr><td>GET</td><td>/requests/:id/evidence</td><td>Bảng tx hash từng mốc cho trang bằng chứng</td><td>200</td></tr>
+    </tbody>
+  </table></div>
+  <p style="font-size:13px;color:var(--tx3)">Mọi endpoint chạm chain trả <b>202 Accepted</b>, không phải 200. Đây là cách hợp đồng API ngăn frontend hiểu nhầm rằng "API OK" nghĩa là "tiền đã chuyển".</p>
+</section>
+
+<!-- 11 PLAN -->
+<section class="sl" data-sec="Giao hàng" data-t="Kế hoạch 20 ngày">
+  <div class="kk">Kế hoạch thực thi</div>
+  <h1 class="sm">Hai mươi ngày, năm chặng</h1>
+  <p class="ld">Bám đúng Daily Breakdown đã cam kết trong SOW. Mỗi chặng có đầu ra đo được, không phải phần trăm hoàn thành.</p>
+
+  <h2><span class="n">Ngày 1–4</span> Registry contract &amp; unit test <span class="b b1">Module A</span></h2>
+  <div class="c">
+    <div class="ck"><div class="bx"></div><div class="tx"><b>Dựng repo và CI</b>fmt, clippy, test chạy trên mỗi push. Ghim phiên bản Soroban SDK trong Cargo.lock ngay Ngày 1.<span class="ow">Tech lead</span></div></div>
+    <div class="ck"><div class="bx"></div><div class="tx"><b>Thiết kế storage &amp; types</b>DataKey, PaymentRequest, ReqStatus, 12 mã lỗi. Chốt chiến lược TTL.<span class="ow">Contract dev</span></div></div>
+    <div class="ck"><div class="bx"></div><div class="tx"><b>create_request + approve + mark_paid + cancel</b>Đủ vòng đời pending → approved → paid và nhánh cancelled.<span class="ow">Contract dev</span></div></div>
+    <div class="ck"><div class="bx"></div><div class="tx"><b>16 unit test</b>Vòng đời, chống lạm dụng, biên. Coverage ≥ 90%.<span class="ow">Contract dev + Tester</span></div></div>
+  </div>
+  <div class="note"><b>Đầu ra</b> Contract compile được; unit test pass cho việc tạo request, phê duyệt và chuyển trạng thái.</div>
+
+  <h2><span class="n">Ngày 5–8</span> Treasury multisig trên testnet <span class="b b2">Module B</span></h2>
+  <div class="c">
+    <div class="ck"><div class="bx"></div><div class="tx"><b>Tạo treasury + trustline</b>Fund bằng friendbot, thiết lập trustline USDC testnet.<span class="ow">Backend</span></div></div>
+    <div class="ck"><div class="bx"></div><div class="tx"><b>Cấu hình 3 signer, threshold 2, masterWeight 0</b>Bước masterWeight hay bị quên nhất — reviewer sẽ kiểm đầu tiên.<span class="ow">Backend</span></div></div>
+    <div class="ck"><div class="bx"></div><div class="tx"><b>Guard chống khoá tài khoản</b>Có test cho trường hợp cấu hình sẽ khoá vĩnh viễn.<span class="ow">Backend</span></div></div>
+    <div class="ck"><div class="bx"></div><div class="tx"><b>Script xác minh từ Horizon</b>In ra cấu hình thật để làm evidence.<span class="ow">Tester</span></div></div>
+    <div class="ck"><div class="bx"></div><div class="tx"><b>Song song: khung giao diện</b>Shell, routing, design token, component trạng thái.<span class="ow">Frontend</span></div></div>
+  </div>
+  <div class="note"><b>Đầu ra</b> Treasury deploy trên testnet với cấu hình 3 signer được xác nhận và threshold được thực thi.</div>
+
+  <h2><span class="n">Ngày 9–13</span> Dịch vụ thu chữ ký <span class="b b2">Module C · D</span></h2>
+  <div class="c">
+    <div class="ck"><div class="bx"></div><div class="tx"><b>build_unsigned()</b>Payment tx có memo = request id và timebounds 1 giờ.<span class="ow">Backend</span></div></div>
+    <div class="ck"><div class="bx"></div><div class="tx"><b>Khoá sequence ở tầng DB</b>Test đồng thời hai lệnh → lệnh thứ hai bị chặn sạch.<span class="ow">Backend + Tech lead</span></div></div>
+    <div class="ck"><div class="bx"></div><div class="tx"><b>submit_signature()</b>Verify ed25519 trên đúng tx hash, chặn ký trùng bằng khoá chính.<span class="ow">Backend</span></div></div>
+    <div class="ck"><div class="bx"></div><div class="tx"><b>Cộng weight, phát hiện đủ ngưỡng</b>Trả tiến độ collected/required cho giao diện.<span class="ow">Backend</span></div></div>
+    <div class="ck"><div class="bx"></div><div class="tx"><b>Bộ đồng bộ chain tối giản</b>Ingest theo cursor, khử trùng theo (tx_hash, op_index).<span class="ow">Tech lead</span></div></div>
+    <div class="ck"><div class="bx"></div><div class="tx"><b>Màn hình tạo lệnh &amp; danh sách</b>E2 và E3.<span class="ow">Frontend</span></div></div>
+  </div>
+  <div class="note"><b>Đầu ra</b> Dịch vụ nhận và lưu chữ ký của approver; phát hiện chính xác khi threshold được đáp ứng.</div>
+
+  <h2><span class="n">Ngày 14–17</span> Submit, cập nhật registry, nhánh từ chối</h2>
+  <div class="c">
+    <div class="ck"><div class="bx"></div><div class="tx"><b>Ghép chữ ký và submit</b>Xử lý riêng tx_bad_seq và timeout — cả hai đều đi qua reconcile.<span class="ow">Tech lead</span></div></div>
+    <div class="ck"><div class="bx"></div><div class="tx"><b>Nối registry: approve và mark_paid</b>Chỉ gọi sau readback xác nhận, không gọi sau submit.<span class="ow">Backend + Contract dev</span></div></div>
+    <div class="ck"><div class="bx"></div><div class="tx"><b>Nhánh từ chối</b>Test khẳng định không có transaction nào rời treasury.<span class="ow">Backend + Tester</span></div></div>
+    <div class="ck"><div class="bx"></div><div class="tx"><b>Integration test trên testnet thật</b>Approve-then-settle và reject, không mock.<span class="ow">Tester</span></div></div>
+    <div class="ck"><div class="bx"></div><div class="tx"><b>Chaos test</b>Giết service giữa lúc submit, khẳng định không double-submit sau khi khởi động lại.<span class="ow">Tester + Tech lead</span></div></div>
+    <div class="ck"><div class="bx"></div><div class="tx"><b>Màn hình ký duyệt</b>E4.<span class="ow">Frontend</span></div></div>
+  </div>
+  <div class="note"><b>Đầu ra</b> Integration test approve-and-settle pass đầy đủ; nhánh từ chối đánh dấu trạng thái đúng và chặn việc submit.</div>
+
+  <h2><span class="n">Ngày 18–20</span> Demo round trip &amp; tài liệu <span class="b b1">Module G</span></h2>
+  <div class="c">
+    <div class="ck"><div class="bx"></div><div class="tx"><b>Chạy full flow trên testnet</b>Tạo lệnh chi → 2/3 chữ ký → chi tới vendor → registry Paid.<span class="ow">Cả đội</span></div></div>
+    <div class="ck"><div class="bx"></div><div class="tx"><b>Trang evidence + thu thập tx hash</b>Sáu mốc, đủ link Stellar Expert.<span class="ow">Frontend + Tester</span></div></div>
+    <div class="ck"><div class="bx"></div><div class="tx"><b>README + hướng dẫn deploy</b>Người ngoài tự deploy lại được từ đầu.<span class="ow">Tech lead</span></div></div>
+    <div class="ck"><div class="bx"></div><div class="tx"><b>Video demo 3–5 phút</b>Cho Chapter Lead review không cần kiến thức kỹ thuật sâu.<span class="ow">Tech lead</span></div></div>
+    <div class="ck"><div class="bx"></div><div class="tx"><b>Public repo &amp; contract address</b>Dọn secret, thêm LICENSE, ghim contract ID vào README.<span class="ow">Tech lead</span></div></div>
+  </div>
+  <div class="note"><b>Đầu ra</b> Request thu đủ 2/3 chữ ký, chi tới địa chỉ vendor, registry đánh dấu paid; transaction hash và deploy guide đã commit.</div>
+</section>
+
+<!-- 12 EVIDENCE -->
+<section class="sl" data-sec="Giao hàng" data-t="Evidence & DoD">
+  <div class="kk">Nghiệm thu</div>
+  <h1 class="sm">Bằng chứng phải nộp và điều kiện coi như xong</h1>
+
+  <h2><span class="n">12.1</span> Evidence theo mục 6.1 của SOW</h2>
+  <div class="tw"><table>
+    <thead><tr><th style="width:110px">Deliverable</th><th style="width:230px">Loại bằng chứng</th><th>Nội dung cụ thể</th></tr></thead>
+    <tbody>
+      <tr><td><b>1</b></td><td>Public repo + contract address</td><td>Mã nguồn Payment Request Registry và contract ID đã deploy trên Stellar testnet, kèm output <code>cargo test</code>.</td></tr>
+      <tr><td><b>2</b></td><td>Repo + transaction hashes</td><td>Mã nguồn dịch vụ thu chữ ký, và một transaction đã submit thể hiện việc phê duyệt dựa trên threshold.</td></tr>
+      <tr><td><b>3</b></td><td>Transaction hashes trên Stellar Expert</td><td>Vòng tròn đầy đủ từ request tới payout, với link giao dịch on-chain kiểm chứng được.</td></tr>
+    </tbody>
+  </table></div>
+
+  <h2><span class="n">12.2</span> Sáu mốc phải có transaction hash</h2>
+  <div class="tw"><table class="mono">
+    <thead><tr><th style="width:56px">#</th><th style="width:280px">Sự kiện</th><th>Kiểm chứng bằng</th></tr></thead>
+    <tbody>
+      <tr><td>E1</td><td>Deploy registry contract</td><td>Stellar Expert · contract ID</td></tr>
+      <tr><td>E2</td><td>Treasury 3 signer, threshold 2, master 0</td><td>Horizon <code>/accounts</code> · so với output script B5</td></tr>
+      <tr><td>E3</td><td>create_request trên registry</td><td>Stellar Expert · tx hash</td></tr>
+      <tr><td>E4</td><td>approve sau khi đủ 2/3 chữ ký</td><td>Stellar Expert · tx hash</td></tr>
+      <tr><td>E5</td><td>Payment tới địa chỉ vendor</td><td>Stellar Expert · tx hash</td></tr>
+      <tr><td>E6</td><td>mark_paid · get_request trả Paid</td><td>Stellar Expert + RPC read</td></tr>
+      <tr><td>E7</td><td><b>Nhánh reject: không transaction nào rời treasury</b></td><td>Khẳng định phủ định — log + test, kèm giải thích cho reviewer</td></tr>
+    </tbody>
+  </table></div>
+
+  <h2><span class="n">12.3</span> Definition of Done</h2>
+  <div class="g g2">
+    <div class="c ok"><h4>Bắt buộc có</h4><ul>
+      <li>Test tự động cho happy path <b>và</b> ít nhất một nhánh lỗi</li>
+      <li>Mọi thay đổi trạng thái đều ghi <code>audit_events</code></li>
+      <li>Mọi endpoint chạm chain trả <b>202</b>, không phải 200</li>
+      <li>Log có <code>trace_id</code> nối được từ giao diện tới chain event</li>
+      <li>Migration chạy được cả lên và xuống</li>
+      <li>Script deploy chạy lại được từ đầu dưới 10 phút</li>
+    </ul></div>
+    <div class="c dn"><h4>Từ chối merge nếu</h4><ul>
+      <li>Có <code>float</code> hoặc <code>double</code> ở bất kỳ đâu trong đường tiền</li>
+      <li>Dùng đồng hồ server để quyết định hết hạn</li>
+      <li>Có đường nào hiện "thành công" trước khi readback</li>
+      <li>Có retry tự động mà không qua readback</li>
+      <li>Registry contract xuất hiện lời gọi chuyển token</li>
+      <li>Secret hoặc seed phrase xuất hiện trong repo hay log</li>
+    </ul></div>
+  </div>
+</section>
+
+<!-- 13 RỦI RO -->
+<section class="sl" data-sec="Giao hàng" data-t="Rủi ro 20 ngày">
+  <div class="kk">Nói thẳng</div>
+  <h1 class="sm">Sáu rủi ro có thể làm trượt 20 ngày</h1>
+
+  <div class="tw"><table>
+    <thead><tr><th style="width:190px">Rủi ro</th><th style="width:96px">Khả năng</th><th>Ảnh hưởng</th><th style="width:250px">Cách giảm</th></tr></thead>
+    <tbody>
+      <tr><td><b>Sequence number tranh chấp</b></td><td><span class="pill e">Cao</span></td><td>Chữ ký đã thu bị vô hiệu, phải làm lại, mất niềm tin ngay tại buổi demo.</td><td>Khoá seq ở DB ngay Ngày 9, có test đồng thời. Đừng để tới Ngày 14 mới phát hiện.</td></tr>
+      <tr><td><b>Mở rộng phạm vi</b></td><td><span class="pill e">Cao</span></td><td>Không kịp giao ba deliverable đã cam kết.</td><td>Danh sách ngoài phạm vi ở trang 2 là ranh giới cứng. PR chạm vào đó bị đóng ngay.</td></tr>
+      <tr><td><b>Quên masterWeight = 0</b></td><td><span class="pill w">Trung bình</span></td><td>Multisig thành hình thức — người giữ khoá treasury ký một mình vẫn được. Reviewer sẽ phát hiện.</td><td>Đưa vào script B2, và script B5 assert lại. Không làm bằng tay.</td></tr>
+      <tr><td><b>Testnet reset hoặc chập chờn</b></td><td><span class="pill w">Trung bình</span></td><td>Mất contract đã deploy và dữ liệu demo.</td><td>Script deploy chạy lại được từ đầu dưới 10 phút, không thao tác tay bước nào.</td></tr>
+      <tr><td><b>Soroban SDK đổi phiên bản</b></td><td><span class="pill w">Trung bình</span></td><td>Contract không build, mất 1–2 ngày.</td><td>Ghim phiên bản trong Cargo.lock ngay Ngày 1. Không update giữa chặng.</td></tr>
+      <tr><td><b>Trustline USDC testnet</b></td><td><span class="pill w">Trung bình</span></td><td>Payment fail ngay tại buổi demo trước mặt reviewer.</td><td>Checklist trước demo: treasury, vendor và ví test đều đã có trustline.</td></tr>
+    </tbody>
+  </table></div>
+
+  <h2><span class="n">13.1</span> Ba câu cần chốt trước Ngày 1</h2>
+  <div class="g g3">
+    <div class="c wr"><div class="n">01</div><h4>Settler là ai?</h4><p>Địa chỉ nào được gọi <code>approve</code> và <code>mark_paid</code> — một khoá backend riêng, hay chính tài khoản treasury? Ảnh hưởng trực tiếp tới thiết kế quyền của contract.</p></div>
+    <div class="c wr"><div class="n">02</div><h4>Contract có nâng cấp được không?</h4><p>Nếu deploy là bất biến thì lỗi phát hiện sau Ngày 20 phải deploy lại contract mới. Nếu có nâng cấp thì ai giữ quyền đó.</p></div>
+    <div class="c wr"><div class="n">03</div><h4>Reference lưu hash hay chuỗi thô?</h4><p>Deck đề xuất lưu <b>hash</b> — chuỗi thô đưa mã đơn hàng nội bộ lên chain công khai cho ai cũng đọc được.</p></div>
+  </div>
+
+  <div class="note w"><b>Sau Instaward này</b>
+    SOW mục 7.1 chọn <b>xin một Instaward tiếp nối</b>. Registry và cơ chế phê duyệt xây trong 20 ngày này chính là nền mà dashboard, đối soát và cổng nhà cung cấp ở các giai đoạn sau dựng trực tiếp lên. Trong lộ trình 6 tháng của SettleFlow, đây là <b>tháng 1</b>.</div>
+</section>
+
+<!-- 14 TÓM TẮT -->
+<section class="sl" data-sec="Giao hàng" data-t="Tóm tắt một trang">
+  <div class="kk">Tóm tắt</div>
+  <h1 class="sm">SOW 1 trên một trang</h1>
+
+  <div class="g g3">
+    <div class="c ok"><h4>Xây gì</h4>
+      <ul><li>Contract sổ đăng ký lệnh chi, không giữ tiền</li><li>Treasury 3 signer, cần 2 chữ ký</li><li>Dịch vụ dựng tx, thu chữ ký, submit</li><li>Bốn màn hình đủ demo</li><li>Deploy testnet + evidence</li></ul></div>
+    <div class="c"><h4>Không xây gì</h4>
+      <ul><li>Dashboard đầy đủ</li><li>Cổng cho nhà cung cấp</li><li>Indexer đối soát</li><li>Xuất dữ liệu kế toán</li><li>Kiểm định bảo mật</li><li>Mainnet</li></ul></div>
+    <div class="c"><h4>Nghiệm thu thế nào</h4>
+      <ul><li>Repo công khai</li><li>Contract ID trên testnet</li><li>Sáu transaction hash</li><li>Video demo 3–5 phút</li><li>Hướng dẫn deploy chạy lại được</li></ul></div>
+  </div>
+
+  <div class="kpi">
+    <div><div class="v" style="color:#5BE49B">13</div><div class="l">feature</div></div>
+    <div><div class="v" style="color:#7FB6FF">37</div><div class="l">module trong 7 nhóm</div></div>
+    <div><div class="v" style="color:#C8A6FF">30</div><div class="l">bước trong luồng nghiệp vụ</div></div>
+    <div><div class="v" style="color:#F7CF6B">4</div><div class="l">màn hình giao diện</div></div>
+    <div><div class="v" style="color:#22D3EE">7</div><div class="l">mốc bằng chứng</div></div>
+    <div><div class="v" style="color:#FF9095">6</div><div class="l">rủi ro đã có phương án</div></div>
+  </div>
+
+  <div class="note"><b>Câu chốt cho buổi trình bày</b>
+    Stellar đã có multisig gốc chạy production nhiều năm, nhưng chưa ai nối nó vào một quy trình duyệt chi thật. SOW 1 xây đúng lớp đó trong 20 ngày, không chạm vào custody, và giao bằng chứng mà bất kỳ ai cũng kiểm chứng được trên blockchain công khai.</div>
+</section>
+
+</div></div></div>
+<script>
+(function(){
+  var sl=[].slice.call(document.querySelectorAll('.sl')),toc=document.getElementById('toc'),
+      st=document.getElementById('st'),ct=document.getElementById('ct'),pg=document.querySelector('#pg > i');
+  var cur=0,last=null;
+  sl.forEach(function(s,i){
+    var sec=s.dataset.sec||'';
+    if(sec!==last){var h=document.createElement('div');h.className='ts';h.textContent=sec;toc.appendChild(h);last=sec;}
+    var it=document.createElement('div');it.className='ti';
+    it.innerHTML='<b>'+String(i+1).padStart(2,'0')+'</b><span>'+(s.dataset.t||('Slide '+(i+1)))+'</span>';
+    it.addEventListener('click',function(){go(i);});toc.appendChild(it);
+  });
+  var items=[].slice.call(toc.querySelectorAll('.ti'));
+  function go(i){
+    if(i<0||i>=sl.length)return;cur=i;
+    if(!document.body.classList.contains('ov')){sl.forEach(function(s,k){s.classList.toggle('on',k===i);});st.scrollTop=0;}
+    else{sl[i].scrollIntoView({behavior:'smooth',block:'start'});}
+    items.forEach(function(t,k){t.classList.toggle('on',k===i);});
+    ct.textContent=(i+1)+' / '+sl.length;pg.style.width=((i+1)/sl.length*100)+'%';
+    try{location.hash='s'+(i+1);}catch(e){}
+  }
+  document.getElementById('nx').addEventListener('click',function(){go(cur+1);});
+  document.getElementById('pv').addEventListener('click',function(){go(cur-1);});
+  document.getElementById('tb').addEventListener('click',function(){toc.classList.toggle('hide');});
+  var ovb=document.getElementById('ovb');
+  ovb.addEventListener('click',function(){
+    var on=document.body.classList.toggle('ov');
+    if(on){sl.forEach(function(s){s.classList.add('on');});}
+    else{sl.forEach(function(s,k){s.classList.toggle('on',k===cur);});st.scrollTop=0;}
+  });
+  document.getElementById('prb').addEventListener('click',function(){
+    document.body.classList.add('ov');sl.forEach(function(s){s.classList.add('on');});
+    setTimeout(function(){window.print();},200);
+  });
+  document.addEventListener('keydown',function(e){
+    if(e.key==='ArrowRight'||e.key==='PageDown'||e.key===' '){e.preventDefault();go(cur+1);}
+    if(e.key==='ArrowLeft'||e.key==='PageUp'){e.preventDefault();go(cur-1);}
+    if(e.key==='Home'){e.preventDefault();go(0);}
+    if(e.key==='End'){e.preventDefault();go(sl.length-1);}
+    if(e.key==='t'||e.key==='T'){toc.classList.toggle('hide');}
+  });
+  var m=/^#s(\d+)$/.exec(location.hash||'');
+  go(m?Math.min(sl.length-1,Math.max(0,parseInt(m[1],10)-1)):0);
+})();
+</script>
+</body>
+</html>

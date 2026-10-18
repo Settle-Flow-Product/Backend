@@ -1,0 +1,26 @@
+[package]
+name = "settle-auth"
+version.workspace = true
+edition.workspace = true
+publish.workspace = true
+license.workspace = true
+description = "Wallet challenge, signature verification and session tokens"
+
+[dependencies]
+settle-domain = { path = "../settle-domain" }
+settle-chain = { path = "../settle-chain" }
+serde.workspace = true
+serde_json.workspace = true
+sha2.workspace = true
+hex.workspace = true
+thiserror.workspace = true
+hmac = "0.12"
+base64 = "0.22"
+getrandom = "0.3"
+
+[dev-dependencies]
+ed25519-dalek.workspace = true
+stellar-xdr.workspace = true
+
+[lints]
+workspace = true

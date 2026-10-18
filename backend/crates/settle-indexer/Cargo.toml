@@ -1,0 +1,15 @@
+[package]
+name = "settle-indexer"
+version.workspace = true
+edition.workspace = true
+publish.workspace = true
+license.workspace = true
+description = "A pure fold from an ordered chain event stream to a request projection"
+
+[dependencies]
+settle-domain = { path = "../settle-domain" }
+serde.workspace = true
+thiserror.workspace = true
+
+[lints]
+workspace = true

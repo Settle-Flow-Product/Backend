@@ -1,0 +1,43 @@
+# The VM layer: one front door, and the origin the backend is told to expect.
+#
+# Layered on docker-compose.yml rather than replacing it, so there is exactly one description of
+# what each service IS — nginx and its routing included — and this file holds only what differs on
+# a server:
+#
+#   docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build
+#
+# which is what `make prod` runs. `make prod` also sets BIND_ADDR=127.0.0.1, so every port the base
+# file publishes for local convenience becomes loopback-only and nginx — already there, already
+# routing — becomes the sole way in.
+#
+# PUBLIC_HOST is the host a BROWSER types — a domain, or the VM's address. Default `localhost`,
+# because that is the honest answer for a stack nobody has pointed a domain at yet.
+
+services:
+  nginx:
+    restart: unless-stopped
+
+  backend:
+    environment:
+      # The public origin, not localhost:5173.
+      #
+      # HOME_DOMAIN is bound into every SEP-10 challenge and checked again when the signed challenge
+      # comes back, so a value that disagrees with the address the wallet actually visited refuses
+      # every sign-in — with a domain mismatch, which reads like a wallet fault rather than a
+      # configuration one. ALLOWED_ORIGINS has to name the same origin for the same reason.
+      #
+      # One variable feeds both, and it carries a port when there is one to carry: HTTP_PORT is 80
+      # for a real deployment and the browser then sends a bare host, but a stack published on
+      # another port must be PUBLIC_HOST=host:port or the two disagree with what the browser saw.
+      HOME_DOMAIN: "${PUBLIC_HOST:-localhost}"
+      ALLOWED_ORIGINS: "http://${PUBLIC_HOST:-localhost}"
+    restart: unless-stopped
+
+  website:
+    restart: unless-stopped
+
+  admin:
+    restart: unless-stopped
+
+  postgres:
+    restart: unless-stopped
